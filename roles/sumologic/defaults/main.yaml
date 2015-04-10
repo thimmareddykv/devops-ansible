@@ -1,0 +1,10 @@
+# file: wfm-search-ansible/roles/sumologic/defaults/main.yaml
+---
+#ansible_playbook_version: 0.1
+#zookeeper_playbook_version: "0.0.3"
+#wfm_zookeeper_dir: /opt/zookeeper-{{wfm_zookeeper_version}}
+
+sumo_collector_config_file: 'default-collector.json'
+sumo_machine_id: 'anon'
+
+sumo_collector_version: '19.110-9'

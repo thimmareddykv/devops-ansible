@@ -1,0 +1,65 @@
+---
+- name: Installs nginx
+  apt: pkg=nginx state=installed
+  sudo: true
+
+- name: copy nginx server config
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf mode=0644 owner=root group=root
+  sudo: true
+
+- name: copy vhost nginx config
+  copy: src={{ nginx_conf_file | default('default') }} dest=/etc/nginx/sites-available/default owner=root group=root mode=644
+  sudo: true
+
+- name: chown html directory to be owned by www-data
+  file: path=/usr/share/nginx/html owner=www-data group=www-data mode=0755
+  sudo: true
+  notify:
+    - restart nginx
+
+# TODO: check if dir has anything first
+- name: get html files
+  shell: ls -1 /usr/share/nginx/html
+  register: existing_html_files
+
+- name: Remove nginx default web files
+  file: path=/usr/share/nginx/html/{{item}} state=absent
+  with_items:
+    - index.html
+    - 50x.html
+  ignore_errors: yes
+  sudo: true
+
+- name: Make sure /var/www/.ssh exists
+  file: path={{ item }} state=directory owner=www-data group=www-data mode=0755
+  sudo: true
+  with_items:
+    - /var/www/.ssh
+
+# TODO: move next 3 steps to an include so its not redundant since its used in other places
+- name: Copy Git keys
+  copy:
+    src={{ item }}
+    dest=/var/www/.ssh/
+    mode=0400
+    owner=www-data
+    group=www-data
+    backup=yes
+  sudo: true
+  with_items:
+    - ../../../roles/apptier/files/keys/id_rsa
+    - ../../../roles/apptier/files/keys/id_rsa.pub
+
+- name: Changing Permissions for private key
+  sudo: true
+  file: path=/var/www/.ssh/id_rsa
+        owner=www-data
+        group=www-data
+        mode=0600
+
+- name: Changing Permissions for public key
+  sudo: true
+  file: path=/var/www/.ssh/id_rsa.pub
+        owner=www-data
+        group=www-data
+        mode=0644

@@ -1,0 +1,19 @@
+---
+#
+# file: api-ansible/common/tasks/main.yaml
+#
+- name: Updating Packages
+  apt: update_cache=yes cache_valid_time=3600 #only update if has not run in last hour
+  tags: system
+  sudo: True
+
+- name: Install list of packages
+apt: pkg={{item}} state=installed
+with_items:
+- git
+- unattended-upgrades
+  sudo: true
+
+#Copy files for unattended-upgrades security
+- copy: src=50unattended-upgrades dest=/etc/apt/apt.conf.d/50unattended-upgrades
+- copy: src=20auto-upgrades dest=/etc/apt/apt.conf.d/20auto-upgrades

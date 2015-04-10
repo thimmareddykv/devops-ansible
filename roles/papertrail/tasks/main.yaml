@@ -1,0 +1,39 @@
+---
+#
+# file: api-ansible/apptier/tasks/main.yaml
+#
+
+- name: Install necessary packages
+  apt: pkg={{ item }} state=installed
+  sudo: true
+  with_items:
+  - make
+  - g++
+  - ruby
+  - ruby-dev
+
+- name: Install necessary gems
+  gem:
+    name=remote_syslog
+    state=latest
+    user_install=no
+    #version=n.n
+  sudo: true
+
+- name: Copy remote_syslog script to init.d directory
+  copy: src=remote_syslog
+        dest=/etc/init.d/
+        mode=755
+  sudo: true
+
+- name: Copy papertrail config to server
+  copy: src=log_files.yaml
+        dest=/etc/log_files.yaml
+        backup=yes
+  sudo: true
+
+- name: Start necessary services
+  service: name={{ item }} state=restarted enabled=yes
+  sudo: true
+  with_items:
+    - remote_syslog

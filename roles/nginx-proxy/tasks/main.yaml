@@ -1,0 +1,16 @@
+---
+#Install nginx proxy
+
+- name: copy nginxproxy.conf site file to /etc/nginx/sites-available
+  copy: src=nginxproxy.conf dest=/etc/nginx/sites-available owner=root group=root mode=644
+  sudo: true
+
+- name: create symlink for /etc/nginx/sites-enabled/nginxproxy.conf
+  file: src=/etc/nginx/sites-available/nginxproxy.conf dest=/etc/nginx/sites-enabled/nginxproxy.conf state=link
+  sudo: true
+
+- name: copy nginx.conf site file to /etc/nginx/
+  copy: src=nginx.conf dest=/etc/nginx owner=root group=root mode=644
+  sudo: true
+  notify:
+  - restart nginx

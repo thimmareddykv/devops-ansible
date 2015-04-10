@@ -1,0 +1,57 @@
+---
+# there are several items that the documentation states that is needed, however we are not storing and we are
+# not doing any authentication, ldap, radius, and mysql are not needed.  Saleforce is handling this for us.
+
+- name: install php5 and dependencies
+  apt: pkg={{ item }} state=installed
+  sudo: true
+  with_items:
+    - php5
+    - php5-dev
+    - php5-mysql
+    - php5-mcrypt
+    - php5-curl
+    - php5-json
+    - php5-fpm
+    - php-pear
+  notify:
+    - start php5-fpm
+
+- name: install mongo pecl package
+  shell: yes '' | sudo pecl install mongo
+  changed_when: "pecl_result.rc == 0"
+  failed_when: "not (('already installed' in pecl_result.stdout) or ('install ok:' in pecl_result.stdout))"
+  register: pecl_result
+  tags:
+    - pecl
+
+# - debug: var=pecl_result
+
+
+- name: copy php.ini
+  copy: src=php.ini dest=/etc/php5/fpm/php.ini owner=root group=root mode=644
+  sudo: true
+  tags:
+    - ini
+
+- name: enable php add ons
+  action: command php5enmod {{ item }}
+  sudo: true
+  with_items:
+    - mcrypt
+    - curl
+    - json
+  notify:
+    - restart php5-fpm
+
+- name: install composer
+  shell: curl -sS https://getcomposer.org/installer | php
+  # sudo: true
+
+- name: move composer to global location
+  shell: mv composer.phar /usr/local/bin/composer
+  sudo: true
+
+- name: copy php5-fpm pool config
+  template: src=www.conf.j2 dest=/etc/php5/fpm/pool.d/www.conf mode=0660 owner={{nginx_user}} group={{nginx_user}}
+  sudo: true

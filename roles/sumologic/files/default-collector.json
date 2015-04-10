@@ -1,0 +1,29 @@
+{
+"api.version": "v1",
+"sources": [
+{
+    "sourceType":"LocalFile",
+    "blacklist":[],
+    "name": "basic_syslog",
+    "category":"OS_Audit",
+    "filters":[],
+    "pathExpression": "/var/log/syslog"
+},
+{
+    "name":"Nginx Access Log",
+    "category":"Application_Nginx_Access",
+    "filters":[],
+    "pathExpression":"/var/log/nginx/access.log",
+    "blacklist":[],
+    "sourceType":"LocalFile"
+},
+{
+    "name":"Nginx Error Log",
+    "category":"Application_Nginx_Error",
+    "filters":[],
+    "pathExpression":"/var/log/nginx/error.log",
+    "blacklist":[],
+    "sourceType":"LocalFile"
+}
+]
+}

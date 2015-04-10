@@ -1,0 +1,11 @@
+{#
+ # file: api-ansible/roles/sumologic/templates/sumo.conf.j2
+ #}
+{#
+ # TODO: Find a better way to name collectors to avoid collisions
+ #}
+name={{ sumo_machine_id }}_{{ wfm_env_group }}_{{ inventory_hostname_short }}
+sources=/opt/sumocollector/{{ sumo_collector_config_file }}
+accessid={{ sumo_accessid }}
+accesskey={{ sumo_accesskey }}
+email=michael.gaudet@wholefoods.com

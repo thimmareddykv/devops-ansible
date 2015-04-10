@@ -1,0 +1,5 @@
+{# 
+ # file: api-ansible/roles/mysql/templates/grant_sql.j2 
+ #}
+GRANT ALL ON *.* TO root@'%' IDENTIFIED BY '{{ local_mysql_pw }}';
+GRANT ALL ON *.* TO root@'{{ ansible_hostname }}' IDENTIFIED BY '{{ local_mysql_pw }}';

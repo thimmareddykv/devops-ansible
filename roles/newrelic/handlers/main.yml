@@ -1,0 +1,16 @@
+---
+
+- name: restart newrelic services
+  service: name={{item}} state=restarted enabled=yes
+  sudo: true
+  with_items:
+    - newrelic-plugin-agent
+    - newrelic-daemon
+    - newrelic-sysmond
+
+- name: restart webserver
+  service: name={{item}} state=restarted enabled=yes
+  sudo: true
+  with_items:
+    - nginx
+    - php5-fpm

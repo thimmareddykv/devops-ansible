@@ -1,0 +1,9 @@
+- name: Notify Hipchat
+  hipchat:
+    token={{ default_hipchat_token }}
+    room={{ default_hipchat_room }}
+    from={{ default_hipchat_from }}
+    msg='Just deployed {{ what_deployed }} version {{ what_deployed_version }} to {{ inventory_hostname_short }}'
+    validate_certs=no
+  ignore_errors: yes   # DO NOT FAIL IF HIPCHAT IS DOWN
+  when: wfm_env_group != 'development'

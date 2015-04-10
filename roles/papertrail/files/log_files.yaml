@@ -1,0 +1,20 @@
+files:
+  - /root/.pm2/logs/*
+  - /var/log/syslog
+  - /var/log/boot.log
+  - /var/log/apt/term.log
+  - /var/log/apt/history.log
+  - /var/log/aptitude
+  - /var/log/dmesg
+  - /var/log/dpkg.log
+  - /var/log/
+  - /var/log/nginx/*.log
+  - /var/log/php5-fpm.log
+  - /var/log/update_pluck.log
+
+exclude_files:
+  - /var/www/sage/v2/logs/newrelic_agent.log
+
+destination:
+  host: logs.papertrailapp.com
+  port: 46657

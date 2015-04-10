@@ -1,0 +1,34 @@
+---
+# file: roles/mysql/tasks/main.yaml
+
+##
+# mysql install
+#
+
+- name: Installs mysql
+  apt: pkg=mysql-server state=present update_cache=false
+  sudo: True
+
+- name: Copy My.cnf
+  copy: src=my.cnf dest=/etc/mysql owner=root mode=0644
+  sudo: True
+
+- name: Start necessary services
+  service: name=mysql state=restarted enabled=yes
+  sudo: true
+
+- name: Installs python-mysqldb for data imports
+  apt: pkg=python-mysqldb state=present update_cache=false
+  sudo: True
+
+- name: Copy mysql permission grant script
+  template: src=grant_sql.j2 dest=/tmp/grant_sql owner=root mode=0600
+  sudo: True
+
+- name: Run mysql permission grant script
+  shell: mysql -u root < /tmp/grant_sql
+  sudo: True
+
+- name: Clean up mysql permission grant script
+  sudo: True
+  file: path=/tmp/grant_sql state=absent

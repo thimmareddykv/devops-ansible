@@ -1,0 +1,95 @@
+---
+# file: devops-ansible/ec2-launch-instance.yaml
+
+# Description:
+#   Attempt to launch ec2 instances 
+#   This file was borrowed from wfm-api team. Thanks.
+
+# Preconditions:
+#   export AWS_ACCESS_KEY_ID=xxx
+#   export AWS_SECRET_ACCESS_KEY=xxx
+
+# Examples:
+#  *** REPLACE DDMMYYYYa IN THESE EXAMPLES ***
+
+#    ansible-playbook ec2-launch-instance.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-jumpserver-YYYYMMDDa server_name=devops-jumpserver-01 role=jump_server instance_count=1 instance_type=m3.small"
+#    ansible-playbook ec2-launch-instance.yaml -i hosts/local-binpy.ini --extra-vars "counter_tag=devops-app-v2-node-qa-YYYYMMDDa server_name=devops-app-v2-node-qa-01 role=app_server instance_count=1 instance_type=m3.medium"
+#    ansible-playbook ec2-launch-instance.yaml -i hosts/local-binpy.ini --extra-vars "counter_tag=devops-app-v2-node-productionb-YYYYMMDDa server_name=devops-app-v2-node-productionb-01 role=app_server instance_count=3 instance_type=m3.xlarge"
+
+# TODOs:
+#   Fix "report instances to user" to check for id before printing to avoid errors
+#   Need to automate adding elastic ip to newly launched server
+#   Make vars: image: a global variable since it is a standard (BEWARE: make sure it works on Tower)
+
+# WARNINGS:
+#   counter_tag is used to limit number of servers launched.
+#   Make counter_tag unique per deployment if you're rotating servers in and out of a load balancer
+
+- name: Launch/configure app server instance
+  hosts: 127.0.0.1
+  connection: local
+#  gather_facts: false
+
+  vars:
+    instance_type: "m3.small"   #m3.xlarge for production
+    region: us-east-1
+    server_name: DevOps General Server
+    role: ansible
+    image: ami-d0ba0cb8 # base ubuntu 14.04 : us-east-1, 64-bit, instance root store
+    sage_aws_group: devops-default-vpc
+
+  tasks:
+    - name: Launch server
+      local_action:
+        module: ec2
+        #vpc_subnet_id: "{{vpc-8dbd20e8}}"
+        vpc_subnet_id: subnet-ced06eb9
+        key_name: devops
+        group: "{{ sage_aws_group }}"
+        instance_type: "{{ instance_type }}"
+        image: "{{ image }}"
+        region: "{{ region }}"
+        wait: yes
+        wait_timeout: 500
+        exact_count: "{{ instance_count | default(1) }}"
+        count_tag:
+          counter_tag: "{{ counter_tag }}"
+      register: ec2_instances
+
+    - include: includes/build-ec2-inventory.yaml
+
+    - name: Tag instances
+      local_action: ec2_tag
+                    resource={{ item.id }}
+                    region={{ region }}
+                    state=present
+      with_items: ec2_instances.tagged_instances
+      args:
+        tags:
+          Name: "{{ server_name }}"
+          counter_tag: "{{ counter_tag }}"
+          #node_environment: "{{ node_environment }}"  # no node in devops!
+          role: "{{ role }}"
+          owner: devops
+
+    - name: wait for instances to listen on port:22
+      wait_for: state=started
+                host={{ item.public_dns_name }}
+                port=22
+      with_items: ec2_instances.tagged_instances
+
+    - name: Report instances to user
+      debug: msg="Instance {{ item.id }} with public IP {{ item.public_ip }}"
+      with_items: ec2_instances.instances
+
+    - name: Notify Hipchat
+      hipchat:
+        token={{ default_hipchat_token }}
+        room={{ default_hipchat_room }}
+        from={{ default_hipchat_from }}
+        msg="AWS Created {{ counter_tag }} Instance {{ item.id }} with public IP {{ item.public_ip }}"
+        validate_certs=no
+      ignore_errors: yes   # DO NOT FAIL IF HIPCHAT IS DOWN
+      with_items: ec2_instances.instances
+
+# TODO: need to automate adding elastic ip to newly launched server

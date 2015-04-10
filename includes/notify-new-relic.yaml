@@ -1,0 +1,9 @@
+- name: Notify New Relic of deployment
+  newrelic_deployment:
+    validate_certs=no
+    token={{ default_newrelic_key }}
+    app_name={{ nrd_app_name }}
+    user="{{ nrd_user }}"
+    revision={{ git_tag }}
+  ignore_errors: yes   # DO NOT FAIL IF New Relic IS DOWN
+  when: wfm_env_group != 'development'

@@ -1,0 +1,122 @@
+# This installs the New Relic daemon, New Relic server agent and the New Relic MeetMe plugin
+
+---
+- name: Add New Relic repository
+  copy:
+    content: "deb http://apt.newrelic.com/debian/ newrelic non-free"
+    dest: /etc/apt/sources.list.d/newrelic.list
+  sudo: true
+
+- name: Install New Relic Key
+  apt_key: url=https://download.newrelic.com/548C16BF.gpg state=present
+  sudo: True
+
+- name: Get latest packages
+  apt: update_cache=yes
+  sudo: true
+
+- name: Install necessary packages
+  apt: pkg={{ item }} state=installed
+  sudo: true
+  with_items:
+    - make
+    - g++
+    - ruby
+    - ruby-dev
+    - newrelic-daemon
+    - newrelic-sysmond
+    - python-software-properties
+  notify:
+    - restart newrelic services
+
+- shell: dpkg --get-selections | grep -v deinstall | grep php
+  ignore_errors: yes
+  register: php_result
+
+- name: Install newrelic-php if applicable
+  apt: pkg={{ item }} state=installed
+  sudo: true
+  with_items:
+    - newrelic-php5
+    - newrelic-php5-common
+  when: php_result.rc == 0
+
+# create the /etc/php5/mods-available directory
+- file: path=/etc/php5/mods-available state=directory
+  sudo: true
+  when: php_result.rc == 0
+
+- name: Copy the newrelic.ini Config to /etc/php5/mods-available
+  copy: src=newrelic.ini dest=/etc/php5/mods-available/newrelic.ini mode=0644
+  sudo: true
+  when: php_result.rc == 0
+
+# Symbolically link the /etc/php5/mods-available/newrelic.ini file to /etc/php5/{fpm,cli}/conf.d/20-newrelic.ini
+- file: src=/etc/php5/mods-available/{{ item.path }} dest={{ item.dest }} state=link
+  with_items:
+    - { path: 'newrelic.ini', dest: '/etc/php5/fpm/conf.d/20-newrelic.ini' }
+    - { path: 'newrelic.ini', dest: '/etc/php5/cli/conf.d/20-newrelic.ini' }
+  sudo: true
+  when: php_result.rc == 0
+
+- name: Set the php application name if a php_app_name variable exists
+  lineinfile:
+    dest=/etc/php5/mods-available/newrelic.ini
+    line="newrelic.appname = \"{{ php_app_name }}\""
+    owner=root
+    state=present
+    insertafter=EOF
+    create=false
+  sudo: true
+  notify:
+    - restart webserver
+
+- name: Make sure we can run PIP
+  apt: pkg={{ item.pkgname }} state=present update_cache=false
+  sudo: true
+  with_items:
+  - { pkgname: "build-essential" }
+  - { pkgname: "python-dev" }
+  - { pkgname: "python-pip" }
+
+- include: ../../../includes/remove-invalid-pip-requests.yaml
+
+- name: Copy the MeetMe Config
+  copy: src=newrelic-plugin-agent.cfg dest=/etc/newrelic/newrelic-plugin-agent.cfg mode=0644
+  sudo: true
+
+- name: Copy the newrelic.cfg to /etc/newrelic
+  copy: src=newrelic.cfg dest=/etc/newrelic/newrelic.cfg
+  sudo: true
+
+# raw module is used rather than the command module to allow the $HOSTNAME env variable to pass corectly
+- raw: sudo sed -i "s/hostname/$HOSTNAME/g" /etc/newrelic/newrelic-plugin-agent.cfg
+
+- name: Install NewRelic plugin
+  pip: name=newrelic-plugin-agent state=latest use_mirrors=no
+  sudo: true
+
+- name: Make sure New Relic dirs exist
+  file: path={{ item }} state=directory group=newrelic owner=newrelic
+  sudo: true
+  with_items:
+  - /var/run/newrelic
+  - /var/log/newrelic
+  sudo: true
+
+- name: Set New Relic license key
+  command: nrsysmond-config --set license_key=22468283816a6d17e0baf3e1fd090d5e82a0352b
+  sudo: true
+
+- name: Copy the MeetMe init.d script
+  copy: src=newrelic-plugin-agent dest=/etc/init.d
+  sudo: true
+
+- file: path=/etc/init.d/newrelic-plugin-agent state=file mode="4764"
+  sudo: true
+
+- name: Update rc.d for newrelic-plugin-agent
+  command: update-rc.d newrelic-plugin-agent defaults
+  sudo: true
+  notify:
+    - restart newrelic services

@@ -1,0 +1,62 @@
+gzip_types application/json;
+
+#gzip_comp_level 6;
+#gzip_vary on;
+#gzip_min_length  1000;
+#gzip_proxied any;
+#gzip_buffers 16 8k;
+
+client_max_body_size 100M;
+
+upstream sage_api_v2 {
+  server 127.0.0.1:3002;
+}
+
+upstream sage_api_v3 {
+  server 127.0.0.1:3003;
+}
+
+server {
+  listen  443; ## listen for ipv4; this line is default and implied
+  ssl on;
+  ssl_certificate certs/star_wholelabs_com.pem;
+  ssl_certificate_key certs/star_wholelabs_com.key;
+
+  ssl_session_timeout 5m;
+  ssl_protocols TLSv1;
+  ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv3:+EXP;
+  #ssl_prefer_server_ciphers on;
+
+  large_client_header_buffers 4 16k;
+
+  index index.html index.htm;
+
+  location /v2/ {
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-NginX-Proxy true;
+
+    proxy_pass http://sage_api_v2/;
+    proxy_redirect off;
+  }
+
+  location /v3/ {
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-NginX-Proxy true;
+
+    proxy_pass http://sage_api_v3/;
+    proxy_redirect off;
+  }
+
+  location / {
+    root   "/var/www/sage/v2/html";
+  }
+  location /nginx_stub_status { 
+    stub_status on; 
+    allow 127.0.0.1; 
+    deny all; 
+  }
+}

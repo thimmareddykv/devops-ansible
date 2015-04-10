@@ -1,0 +1,29 @@
+---
+# file: api-ansible/roles/newrelic/handlers/main.yaml
+- name: newrelic-plugin-agent
+  service: name=newrelic-plugin-agent state=started
+  sudo: true
+
+- name: restart php5-fpm
+  service: name=php5-fpm state=restarted
+  sudo: true
+
+- name: start php5-fpm
+  service: name=php5-fpm state=started
+  sudo: true
+
+- name: restart php5
+  service: name=php5 state=restarted
+  sudo: true
+
+- name: start php5
+  service: name=php5 state=started
+  sudo: true
+
+- name: restart nginx
+  service: name=nginx state=restarted
+  sudo: true
+
+- name: start nginx
+  service: name=nginx state=started
+  sudo: true

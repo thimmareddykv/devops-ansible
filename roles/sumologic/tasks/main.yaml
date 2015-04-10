@@ -1,0 +1,83 @@
+---
+# file: api-ansible/roles/sumologic/tasks/main.yaml
+
+#
+# TODO: Increase idempotency
+# TODO: Handle what happens when the Sumo version number changes
+#
+
+# Get secret access id and key used in sumo.conf
+- include_vars: ../../../secrets/sumo.yaml
+
+# Must determine if collector exists BEFORE unarchive step
+- name: Prepare to stop the collector if it already exists
+  sudo: True
+  stat: path=/opt/sumocollector/collector
+  register: stat_sumo_coll
+
+- name: Updating Packages
+  apt: update_cache=yes
+  tags: system
+  sudo: True
+
+- name: Install JRE
+  apt: pkg=openjdk-7-jre state=present
+  sudo: True
+
+- name: Download the Sumo Collector Installer
+  get_url: url=https://collectors.sumologic.com/rest/download/tar dest=~/LatestSumo.tar.gz
+  sudo: True
+  register: sumo_download
+
+- name: Unarchive Sumo Collector
+  sudo: True
+  unarchive: copy=no src=~/LatestSumo.tar.gz dest=/opt
+  when: sumo_download.changed
+
+- name: Stop the collector if it exists
+  sudo: True
+  command: /opt/sumocollector/collector stop
+  when: stat_sumo_coll.stat.exists is defined and stat_sumo_coll.stat.exists == True
+  ignore_errors: True
+
+- name: Copy linux64 tanuki sumo wrapper
+  sudo: True
+  command: cp /opt/sumocollector/tanuki/linux64/wrapper /opt/sumocollector/
+
+- name: Chmod tanuki sumo wrapper
+  sudo: True
+  file: path=/opt/sumocollector/wrapper mode=755
+
+- name: Copy linux64 tanuki sumo lib
+  sudo: True
+  command: cp /opt/sumocollector/tanuki/linux64/libwrapper.so /opt/sumocollector/{{ sumo_collector_version }}/bin/native/lib/
+
+- name: Chmod linux64 tanuki sumo lib
+  sudo: True
+  file: path=/opt/sumocollector/{{ sumo_collector_version }}/bin/native/lib/ mode=755
+
+- name: Chmod collector script
+  sudo: True
+  file: path=/opt/sumocollector/collector mode=755
+
+- name: Copy default collector config
+  sudo: True
+  copy: src={{ sumo_collector_config_file }} dest=/opt/sumocollector/{{ sumo_collector_config_file }} mode=644
+
+- name: Update wrapper configuration with java location
+  sudo: True
+  lineinfile: dest=/opt/sumocollector/config/wrapper.conf regexp="^wrapper.java.command=\$" line=wrapper.java.command=/usr/bin/java
+
+- name: Place sumo configuration
+  sudo: True
+  template: src=sumo.conf.j2 dest=/etc/sumo.conf
+
+- name: Request the collector start on reboot (for first install)
+  sudo: True
+  command: /opt/sumocollector/collector install
+  when: not stat_sumo_coll.stat.exists
+
+- name: Start the collector
+  sudo: True
+  command: /opt/sumocollector/collector start
+
