@@ -8,6 +8,9 @@
 
   roles:
     - { role: common, tags: "common" }
-#    - { role: sshd, tags: "sshd" }
+#    - { role: deploy-jumpserver, tags: "deploy-jumpserver" }
+    - { role: sshd, tags: "sshd" }
+#    - { role: sumologic, tags: "sumologic" }
+#    - { role: papertrail, tags: "papertrail" }
   sudo: yes
   vars:

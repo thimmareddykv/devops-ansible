@@ -10,10 +10,6 @@
  
   - name: Install fail2ban
     action: apt pkg=fail2ban state=installed
-  
-  - name: Disallow password authentication
-    action: lineinfile dest=/etc/ssh/sshd_config regexp="^PasswordAuthentication" line="PasswordAuthentication no" state=present
-    notify: Restart ssh
  
   - name: Setup ufw
     action: shell ufw allow 22/tcp
@@ -23,6 +19,53 @@
  
   - name: Enable ufw
     action: shell echo 'y' | ufw enable
- 
+
+- name: Create local configuration file for fail2ban
+  template: src=jail.local.j2 dest=/etc/fail2ban/jail.local
+          owner=root group=root mode=0644
+  notify: restart fail2ban
+
   - name: Disallow root SSH access
-    action: lineinfile dest=/etc/ssh/sshd_config regexp="^PermitRootLogin" line="PermitRootLogin no" state=present
+    lineinfile:
+        backup=yes
+        state=present
+        dest=/etc/ssh/sshd_config
+        regexp='^PermitRootLogin'
+        line='PermitRootLogin no'
+
+  - name: Updating SSH MaxAuthTries to 3
+    lineinfile:
+        backup=yes
+        state=present
+        dest=/etc/ssh/sshd_config
+        regexp='^MaxAuthTries' 
+        line='MaxAuthTries 3'
+
+  - name: Disallow password authentication
+    lineinfile:
+        backup=yes
+        state=present
+        dest=/etc/ssh/sshd_config
+        regexp='^PasswordAuthentication'
+        line='PasswordAuthentication no'
+    notify: restart ssh
+
+#Below is a differing method for invoking the iptables with a j2 template
+#
+#- name: Create a basic firewall settings from template
+#  template: src=iptables.firewall.rules.j2 dest=/etc/iptables.firewall.rules
+#            owner=root group=root mode=0644
+#
+#- name: Check if iptables firewall configuration differs from the template
+#  raw: diff /etc/iptables.initial.state <(iptables -L -n)
+#  register: iptablesCheck
+#  changed_when: iptablesCheck.rc != 0 
+#  failed_when: iptablesCheck.rc > 1 
+#
+#- name: Activate firewall rules
+#  shell: iptables-restore < /etc/iptables.firewall.rules; iptables -L -n > /etc/iptables.initial.state;
+#  when: iptablesCheck.rc != 0
+#
+#- name: Create firewall startup script
+#  copy: src=firewall_startup.sh dest=/etc/network/if-pre-up.d/firewall
+#          owner=root group=root mode=0755
