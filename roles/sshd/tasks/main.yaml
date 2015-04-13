@@ -20,10 +20,10 @@
   - name: Enable ufw
     action: shell echo 'y' | ufw enable
 
-- name: Create local configuration file for fail2ban
-  template: src=jail.local.j2 dest=/etc/fail2ban/jail.local
+  - name: Create local configuration file for fail2ban
+    template: src=jail.local.j2 dest=/etc/fail2ban/jail.local
           owner=root group=root mode=0644
-  notify: restart fail2ban
+    notify: restart fail2ban
 
   - name: Disallow root SSH access
     lineinfile:
