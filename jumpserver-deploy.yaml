@@ -1,11 +1,13 @@
---
+---
 # file: devops-ansible/jumpserver.yaml
-
 # Examples:
 #   ansible-playbook jumpservers.yaml -i hosts/development.ini
 #   (SUMO) ansible-playbook jumpservers.yaml -i hosts/development.ini --extra-vars="dosumo=yay" --vault-password-file=~/.vault_pass.txt
 
-
 - hosts: jumpservers
+
   roles:
-    - common
+    - { role: common, tags: "common" }
+#    - { role: sshd, tags: "sshd" }
+  sudo: yes
+  vars:

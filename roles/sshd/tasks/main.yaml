@@ -1,0 +1,28 @@
+---
+#  vars:
+#  - ubuntu_release: trusty
+#  - logwatch_email: <your email addy>
+#    # crypted passwords, generated on a Linux box using: 
+#    # echo 'import crypt,getpass; print crypt.crypt(getpass.getpass(), "$6$YOURSALT")' | python -
+#  - root_password: ''
+#  - deploy_password: ''
+ 
+ 
+  - name: Install fail2ban
+    action: apt pkg=fail2ban state=installed
+  
+  - name: Disallow password authentication
+    action: lineinfile dest=/etc/ssh/sshd_config regexp="^PasswordAuthentication" line="PasswordAuthentication no" state=present
+    notify: Restart ssh
+ 
+  - name: Setup ufw
+    action: shell ufw allow 22/tcp
+ 
+  - name: Setup ufw
+    action: shell ufw allow 443/tcp
+ 
+  - name: Enable ufw
+    action: shell echo 'y' | ufw enable
+ 
+  - name: Disallow root SSH access
+    action: lineinfile dest=/etc/ssh/sshd_config regexp="^PermitRootLogin" line="PermitRootLogin no" state=present
