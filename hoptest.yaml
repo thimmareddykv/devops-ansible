@@ -1,10 +1,10 @@
 ---
 # file: devops-ansible/hoptest.yaml
 # Examples:
-#   ansible-playbook jumpservers.yaml -i hosts/development.ini
-#   (SUMO) ansible-playbook hoptest.yaml -i hosts/jumpservers.ini
+#   ansible-playbook hoptest.yaml -i hosts/hoptest.ini
+#   (SUMO) ansible-playbook hoptest.yaml -i hosts/hoptest.ini
 
-- hosts: jumpservers
+- hosts: hoptest
 
   roles:
     - { role: common, tags: "common" }
