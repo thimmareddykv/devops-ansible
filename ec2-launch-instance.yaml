@@ -34,19 +34,19 @@
     #instance_type: "m3.small"   #m3.xlarge for production
     instance_type: "t2.small"   #m3.xlarge for production
     region: us-east-1
-    server_name: DevOps General Server
+    server_name: DevOpsGeneralServer
     role: ansible
     #image: ami-d0ba0cb8 # base ubuntu 14.04 : us-east-1, 64-bit, instance root store
     image: ami-1ecae776 # Devops testing for jumpserver
     sage_aws_group: devops-default-vpc
-    vpc_subnet_id: subnet-ced06eb9
+    #vpc_subnet_id: subnet-ced06eb9
 
   tasks:
     - name: Launch server
       local_action:
         module: ec2
-        vpc_subnet_id: "{{ vpc_subnet_id }}"
-        #vpc_subnet_id: subnet-ced06eb9
+        #vpc_subnet_id: "{{ vpc_subnet_id }}"
+        vpc_subnet_id: subnet-ced06eb9
         key_name: devops
         group: "{{ sage_aws_group }}"
         instance_type: "{{ instance_type }}"
@@ -85,14 +85,14 @@
       debug: msg="Instance {{ item.id }} with public IP {{ item.public_ip }}"
       with_items: ec2_instances.instances
 
-    - name: Notify Hipchat
-      hipchat:
-        token={{ default_hipchat_token }}
-        room={{ default_hipchat_room }}
-        from={{ default_hipchat_from }}
-        msg="AWS Created {{ counter_tag }} Instance {{ item.id }} with public IP {{ item.public_ip }}"
-        validate_certs=no
-      ignore_errors: yes   # DO NOT FAIL IF HIPCHAT IS DOWN
-      with_items: ec2_instances.instances
+#    - name: Notify Hipchat
+#      hipchat:
+#        token={{ default_hipchat_token }}
+#        room={{ default_hipchat_room }}
+#        from={{ default_hipchat_from }}
+#        msg="AWS Created {{ counter_tag }} Instance {{ item.id }} with public IP {{ item.public_ip }}"
+#        validate_certs=no
+#      ignore_errors: yes   # DO NOT FAIL IF HIPCHAT IS DOWN
+#      with_items: ec2_instances.instances
 
 # TODO: need to automate adding elastic ip to newly launched server

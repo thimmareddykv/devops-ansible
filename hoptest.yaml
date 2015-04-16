@@ -1,0 +1,17 @@
+---
+# file: devops-ansible/hoptest.yaml
+# Examples:
+#   ansible-playbook jumpservers.yaml -i hosts/development.ini
+#   (SUMO) ansible-playbook hoptest.yaml -i hosts/jumpservers.ini
+
+- hosts: jumpservers
+
+  roles:
+    - { role: common, tags: "common" }
+#    - { role: jumpserver, tags: "jumpserver" }
+    - { role: sshd, tags: "sshd" }
+#    - { role: sumologic, tags: "sumologic" }
+#    - { role: papertrail, tags: "papertrail" }
+  sudo: yes
+  vars:
+

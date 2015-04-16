@@ -25,7 +25,7 @@ wfm_tw_cidr_ip: '64.132.0.0/24'
 
 #### HipChat Variables ###
 default_hipchat_token: "2788281e973185e1bd226b8ec8d6b4"
-default_hipchat_room: "1051568"
+default_hipchat_room: "1426485"
 default_hipchat_from: "Ansible"
 
 #### Rollbar Variables ###
