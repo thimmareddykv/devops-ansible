@@ -1,0 +1,45 @@
+---
+#  vars:
+#  - ubuntu_release: trusty
+#  - logwatch_email: <your email addy>
+#    # crypted passwords, generated on a Linux box using: 
+#    # echo 'import crypt,getpass; print crypt.crypt(getpass.getpass(), "$6$YOURSALT")' | python -
+#  - root_password: ''
+#  - deploy_password: ''
+ 
+ 
+  - name: Install fail2ban
+    action: apt pkg=fail2ban state=installed
+ 
+  - name: Setup ufw
+    action: shell ufw allow 22/tcp
+ 
+#  - name: Modify the /etc/sysctl.conf file for greater security
+#    copy: src=sysctl.conf dest=/etc/sysctl.conf
+#    notify: reload sysctl.conf
+#
+#  - name: Modify the /etc/sysctl.conf file for greater security
+#    template: src=sshd_config.j2 dest=/etc/sshd_config
+#    notify: restart ssh
+
+# Set vm.swappiness to 5 in /etc/sysctl.conf
+  - sysctl: name=vm.swappiness value=5 state=present
+
+# ExecShield is security Linux kernel patch to avoid worms and automated remote attacks
+#  - sysctl: name=kernel.exec-shield value=1 state=present
+
+# Address Space Layout Randomization (ASLR) can help defeat certain types of buffer overflow attacks
+  - sysctl: name="kernel.randomize_va_space" value=1 state=present
+
+# Reverse path filtering/IP Spoofing protection
+  - sysctl: name="net.ipv4.conf.all.rp_filter" value=1 state=present
+
+# Disable IP source routing
+  - sysctl: name="net.ipv4.conf.all.accept_source_route" value=1 state=present
+
+# Ignore broadcasts requests
+  - sysctl: name="net.ipv4.icmp_echo_ignore_broadcasts" value=1 state=present
+#  - sysctl: name="net.ipv4.icmp_ignore_bogus_error_messages" value=1 state=present
+
+# Make sure spoofed packets get logged
+  - sysctl: name="net.ipv4.conf.all.log_martians" value=1 state=present reload=yes

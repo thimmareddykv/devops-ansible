@@ -8,9 +8,13 @@
 
   roles:
     - { role: common, tags: "common" }
-#    - { role: deploy-jumpserver, tags: "deploy-jumpserver" }
+    - { role: jumpserver, tags: "jumpserver" }
     - { role: sshd, tags: "sshd" }
 #    - { role: sumologic, tags: "sumologic" }
 #    - { role: papertrail, tags: "papertrail" }
   sudo: yes
   vars:
+
+#  tasks:
+#   - name: Copy ssh_config file to /etc
+#   action: copy src=ssh_config dest=/etc/ssh_config
