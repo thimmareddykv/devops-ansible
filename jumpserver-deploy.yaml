@@ -10,11 +10,31 @@
     - { role: common, tags: "common" }
     - { role: jumpserver, tags: "jumpserver" }
     - { role: sshd, tags: "sshd" }
+    - { role: ansible-users, tags: "ansible-users" }
+#    - { role: user_management, tags: "user_management" }
 #    - { role: sumologic, tags: "sumologic" }
 #    - { role: papertrail, tags: "papertrail" }
   sudo: yes
-  vars:
+# - include_vars: users.yml
+#  vars:
 
-#  tasks:
-#   - name: Copy ssh_config file to /etc
-#   action: copy src=ssh_config dest=/etc/ssh_config
+#    users_admin_sudo_password: false
+  roles:
+  - role: ansible-users
+    users:
+    - name: carl
+      uid: 1010
+      comment: 'Carl Crisp'
+      is_admin: yes
+      groups:
+      - beancounters
+    - name: ec_user
+      state: absent
+    users_groups:
+    - name: beancounters
+    users_ssh_keys:
+    - name: carl
+      keys:
+      - ssh-rsa AAAA....... carl@accounts.example.com
+
+  #  - include: includes/users.yaml

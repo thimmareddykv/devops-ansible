@@ -11,6 +11,7 @@
   apt: pkg={{item}} state=installed
   with_items:
   - git
+  - finger
 #  - fail2ban
   - unattended-upgrades
   sudo: true

@@ -1,0 +1,11 @@
+---  
+users:
+- name: alice
+  comment: Alice
+  password: '$6$hE1TkH.X$F9flUhXGiL8zI4lOioqp1FxN8L8HrMbuP4ZFVbv5MnyeQFAhIAsbTmT6t7.p93FgyiJo3U/aJeiGHzCTUvA.s.'
+  is_admin: yes
+  groups:
+    - devs
+    - mgmt
+- name: bob
+  state: absent

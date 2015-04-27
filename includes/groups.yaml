@@ -1,0 +1,7 @@
+users_groups:
+- name: devs
+  gid: 1500
+- name: mgmt
+  gid: 2500
+- name: hr
+  state: absent

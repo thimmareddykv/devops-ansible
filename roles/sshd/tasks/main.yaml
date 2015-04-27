@@ -25,6 +25,11 @@
           owner=root group=root mode=0644
     notify: restart fail2ban
 
+  - name: Create local configuration file for fail2ban
+    template: src=iptables-repeater.conf.j2 dest=/etc/fail2ban/jail.local
+          owner=root group=root mode=0644
+    notify: restart fail2ban
+
   - name: Disallow root SSH access
     lineinfile:
         backup=yes
