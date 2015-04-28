@@ -12,9 +12,9 @@
 # Examples:
 #  *** REPLACE DDMMYYYYa IN THESE EXAMPLES ***
 
-#    ansible-playbook ec2-launch-instance.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-jumpserver-YYYYMMDDa server_name=devops-jumpserver-01 role=jump_server instance_count=1 instance_type=m3.small"
-#    ansible-playbook ec2-launch-instance.yaml -i hosts/local-binpy.ini --extra-vars "counter_tag=devops-app-v2-node-qa-YYYYMMDDa server_name=devops-app-v2-node-qa-01 role=app_server instance_count=1 instance_type=m3.medium"
-#    ansible-playbook ec2-launch-instance.yaml -i hosts/local-binpy.ini --extra-vars "counter_tag=devops-app-v2-node-productionb-YYYYMMDDa server_name=devops-app-v2-node-productionb-01 role=app_server instance_count=3 instance_type=m3.xlarge"
+#    ansible-playbook jumpserver-launch-instance.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-jumpserver-`date '+%Y%m%d'` server_name=devops-jumpserver-01 role=jump_server instance_count=1 instance_type=t2.micro"
+#    ansible-playbook jumpserver-launch-instance.yaml -i hosts/local-binpy.ini --extra-vars "counter_tag=devops-jumpserver-`date '+%Y%m%d'` server_name=devops-jumpserver-01 role=app_server instance_count=1 instance_type=t2.micro"
+#    ansible-playbook jumpserver-launch-instance.yaml -i hosts/local-binpy.ini --extra-vars "counter_tag=devops-jumpserver-`date '+%Y%m%d'` server_name=devops-jumpserver-01 role=app_server instance_count=1 instance_type=t2.micro"
 
 # TODOs:
 #   Fix "report instances to user" to check for id before printing to avoid errors

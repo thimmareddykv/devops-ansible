@@ -1,12 +1,57 @@
 ---  
 users:
-- name: alice
-  comment: Alice
-  password: '$6$hE1TkH.X$F9flUhXGiL8zI4lOioqp1FxN8L8HrMbuP4ZFVbv5MnyeQFAhIAsbTmT6t7.p93FgyiJo3U/aJeiGHzCTUvA.s.'
+- name: jaytischler
+  comment: Jay
+  password: ''
   is_admin: yes
   groups:
     - devs
     - mgmt
-- name: bob
+- name: craigpfeffer
+  comment: Craig
+  password: ''
+  is_admin: yes
+  groups:
+    - devs
+    - mgmt
+- name: jonathanbaugh
+  comment: Jonathan
+  password: ''
+  is_admin: yes
+  groups:
+    - devs
+    - mgmt
+- name: michaelgaudet
+  comment: Michael
+  password: ''
+  is_admin: yes
+  groups:
+    - devs
+    - mgmt
+- name: jebkirubakaran
+  comment: Jeb
+  password: ''
+  is_admin: yes
+  groups:
+    - devs
+    - mgmt
+- name: frankandvictor
+  comment: frankandvictor
+  password: ''
+  is_admin: no
+  groups:
+    - devs
+- name: samirpatel
+  comment: Samir
+  password: ''
+  is_admin: no
+  groups:
+    - devs
+- name: tynakiefer
+  comment: tynakiefer
+  password: ''
+  is_admin: no
+  groups:
+    - devs
+- name: bobbyhill
   state: absent
-

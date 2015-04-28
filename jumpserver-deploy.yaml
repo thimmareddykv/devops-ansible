@@ -11,30 +11,33 @@
     - { role: jumpserver, tags: "jumpserver" }
     - { role: sshd, tags: "sshd" }
     - { role: ansible-users, tags: "ansible-users" }
+#    - include_vars: includes/users.yaml
+#    - include_vars: includes/keys.yaml
 #    - { role: user_management, tags: "user_management" }
 #    - { role: sumologic, tags: "sumologic" }
 #    - { role: papertrail, tags: "papertrail" }
   sudo: yes
-# - include_vars: users.yml
-#  vars:
+#     - include_vars: includes/users.yaml
+#     - include_vars: includes/keys.yaml
+  vars:
 
-#    users_admin_sudo_password: false
-  roles:
-  - role: ansible-users
-    users:
-    - name: carl
-      uid: 1010
-      comment: 'Carl Crisp'
-      is_admin: yes
-      groups:
-      - beancounters
-    - name: ec_user
-      state: absent
-    users_groups:
-    - name: beancounters
-    users_ssh_keys:
-    - name: carl
-      keys:
-      - ssh-rsa AAAA....... carl@accounts.example.com
+    users_admin_sudo_password: false
+#  roles:
+#  - role: ansible-users
+#    users:
+#    - name: carl
+#      uid: 1010
+#      comment: 'Carl Crisp'
+#      is_admin: yes
+#      groups:
+#      - beancounters
+#    - name: ec_user
+#      state: absent
+#    users_groups:
+#    - name: beancounters
+#    users_ssh_keys:
+#    - name: carl
+#      keys:
+#      - ssh-rsa AAAA....... carl@accounts.example.com
 
   #  - include: includes/users.yaml

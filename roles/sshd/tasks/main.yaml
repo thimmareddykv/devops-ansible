@@ -26,7 +26,7 @@
     notify: restart fail2ban
 
   - name: Create local configuration file for fail2ban
-    template: src=iptables-repeater.conf.j2 dest=/etc/fail2ban/jail.local
+    template: src=iptables-repeater.conf.j2 dest=/etc/fail2ban/action.d/iptables-repeater.conf
           owner=root group=root mode=0644
     notify: restart fail2ban
 
