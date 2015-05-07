@@ -35,6 +35,13 @@ users:
   groups:
     - devs
     - mgmt
+- name: danwalker
+  comment: Dan
+  password: ''
+  is_admin: yes
+  groups:
+    - devs
+    - mgmt
 - name: frankandvictor
   comment: frankandvictor
   password: ''
