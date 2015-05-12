@@ -9,8 +9,8 @@
   roles:
     - { role: common, tags: "common" }
     - { role: jumpserver, tags: "jumpserver" }
-    - { role: sshd, tags: "sshd" }
-    - { role: ansible-users, tags: "ansible-users" }
+#    - { role: sshd, tags: "sshd" }
+#    - { role: ansible-users, tags: "ansible-users" }
 #    - include_vars: includes/users.yaml
 #    - include_vars: includes/keys.yaml
 #    - { role: user_management, tags: "user_management" }

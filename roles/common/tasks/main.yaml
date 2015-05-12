@@ -35,8 +35,8 @@
 - name: Setup ufw
   action: shell ufw allow 22/tcp
  
-- name: Setup ufw
-  action: shell ufw allow 443/tcp
+#- name: Setup ufw
+#  action: shell ufw allow 443/tcp
  
 - name: Enable ufw
   action: shell echo 'y' | ufw enable

@@ -6,8 +6,8 @@
 #   This file was borrowed from wfm-api team. Thanks.
 
 # Preconditions:
-#   export AWS_ACCESS_KEY_ID=xxx
-#   export AWS_SECRET_ACCESS_KEY=xxx
+#   export AWS_ACCESS_KEY_ID=
+#   export AWS_SECRET_ACCESS_KEY=
 
 # Examples:
 #  *** REPLACE DDMMYYYYa IN THESE EXAMPLES ***
@@ -31,25 +31,28 @@
 #  gather_facts: false
 
   vars:
-    instance_type: "t2.small"   #m3.xlarge for production
+    #instance_type: "t2.small"   #m3.xlarge for production
+    instance_type: "t2.micro"   #m3.xlarge for production
     region: us-east-1
-    server_name: jumpserver
-    role: ansible
+    server_name: devops:shared:bastion
+    role: null
+    #role: ansible
     #image: ami-d0ba0cb8 # base ubuntu 14.04 : us-east-1, 64-bit, instance root store
     image: ami-d05e75b8 # Devops testing for jumpserver
     
     #sage_aws_group: devops-default-vpc
-    sage_aws_group: devops-jumpserver
-    vpc_subnet_id: subnet-ced06eb9
+    aws_group: allow-wfm-ssh
+    #vpc_subnet_id: subnet-ced06eb9  # Testing Subnet
+    vpc_subnet_id: subnet-d47effff  # bastion a
+    #vpc_subnet_id: subnet-72ee9505   # bastion b
 
   tasks:
     - name: Launch server
       local_action:
         module: ec2
         vpc_subnet_id: "{{ vpc_subnet_id }}"
-        #vpc_subnet_id: subnet-ced06eb9
-        key_name: devops
-        group: "{{ sage_aws_group }}"
+        key_name: wfm-devops-root
+        group: "{{ aws_group }}"
         instance_type: "{{ instance_type }}"
         image: "{{ image }}"
         region: "{{ region }}"
@@ -72,8 +75,10 @@
         tags:
           Name: "{{ server_name }}"
           counter_tag: "{{ counter_tag }}"
-          role: "{{ role }}"
-          owner: devops
+          #role: "{{ role }}"
+          #owner: devops
+          "wfm:team": devops
+          "wfm:environment": shared
 
     - name: wait for instances to listen on port:22
       wait_for: state=started

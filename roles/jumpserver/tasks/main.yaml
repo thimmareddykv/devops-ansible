@@ -35,7 +35,7 @@
   - sysctl: name="net.ipv4.conf.all.rp_filter" value=1 state=present
 
 # Disable IP source routing
-  - sysctl: name="net.ipv4.conf.all.accept_source_route" value=1 state=present
+  - sysctl: name="net.ipv4.conf.all.accept_source_route" value=0 state=present
 
 # Ignore broadcasts requests
   - sysctl: name="net.ipv4.icmp_echo_ignore_broadcasts" value=1 state=present

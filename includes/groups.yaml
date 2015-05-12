@@ -1,9 +1,14 @@
 users_groups:
-- name: devs
+- name: devops
   gid: 1500
-- name: mgmt
-  gid: 2500
+- name: api
+  gid: 1501
+- name: administrators
+  gid: 1502
 - name: sudo
-  gid: 2501
-- name: hr
-  state: absent
+  gid: 1503
+- name: developers
+  gid: 1505
+# How to Remove a group
+#- name: hr
+#  state: absent
