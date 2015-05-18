@@ -1,10 +1,11 @@
 ---
-# sage_app_server_a
-# tag_unique_name_sage_app_server_a
+# devops_bastion_a
+# tag_unique_name_devops_bastion_a
 
 - name: Add all instance public IPs to host group
   add_host: hostname={{ item.public_ip }}
-            groupname=ec2hosts
+            #groupname=ec2hosts
+            groupname=devops-bastion
             ansible_ssh_private_key_file=sage2.pem
             ansible_ssh_user=ubuntu
   with_items: ec2_instances.tagged_instances

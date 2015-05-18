@@ -1,0 +1,18 @@
+############################################################################
+###          Sample ~/.ssh/config file for devops jumpservers            ###
+############################################################################
+#
+#        ProxyCommand ssh -T -a bastiona  nc $(echo %h |cut -d+ -f2) %p 2>/dev/null
+#	ProxyCommand ssh -T -a bastiona nc %h %p 2>/dev/null
+#
+###########################################################################
+
+# DevOps ec2 Internal
+Host ip-*.ec2.internal
+	ProxyCommand ssh -T -a devops-bastiona nc $(echo %h |cut -d+ -f2) %p 2>/dev/null
+
+# DevOps Bastion-A
+Host devops-bastiona
+	Hostname 52.5.117.70
+	IdentityFile ~/.ssh/wfm-devops-root.pem
+        Port 22
