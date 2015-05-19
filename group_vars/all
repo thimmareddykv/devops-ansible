@@ -1,5 +1,5 @@
 ---
-# file: api-ansible/group_vars/all
+# file: devops-ansible/group_vars/all
 
 # Description:
 #   These variables should be accessible from any playbook or place
@@ -7,7 +7,6 @@
 # TODOs: 
 #   Consider turning the dictionaries into a dynamic inventory source
 #   Also consider turning these into a vars_files: include
-#   Re-enable Tweets testing once the endpoint is less flaky ( wfm_sage_v2_endpoints )
 
 #### GENERAL VARIABLES
 
@@ -48,4 +47,3 @@ what_deployed_version: "NoTag"
 
 
 # m3.medium not supported in Availability Zone us-east-1c
-

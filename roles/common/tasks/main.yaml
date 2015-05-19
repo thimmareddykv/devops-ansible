@@ -5,7 +5,7 @@
 - name: Updating Packages
   apt: update_cache=yes cache_valid_time=3600 upgrade=safe #only update if has not run in last hour
   tags: system
-  sudo: True
+#  sudo: True
 
 - name: Install list of packages
   apt: pkg={{item}} state=installed
@@ -14,32 +14,41 @@
   - finger
 #  - fail2ban
   - unattended-upgrades
-  sudo: true
+#  sudo: true
 
 - name: Copy 50unattended-upgrades into /etc/apt/apt.conf.d
-  action: copy src=50unattended-upgrades dest=/etc/apt/apt.conf.d/50unattended-upgrades
+  action: copy src=50unattended-upgrades dest=/etc/apt/apt.conf.d/50unattended-upgrades force=yes
+#  sudo: true
 
 - name: Copy 20auto-upgrades into /etc/apt/apt.conf.d
   action: copy src=20auto-upgrades dest=/etc/apt/apt.conf.d/20auto-upgrades
+#  sudo: true
 
 #- name: Disallow password authentication
 #  action: lineinfile dest=/etc/ssh/sshd_config regexp="^PasswordAuthentication" line="PasswordAuthentication no" state=present
 #  notify: restart ssh
+  sudo: true
  
 - name: Adjust APT update intervals
   action: copy src=apt_periodic dest=/etc/apt/apt.conf.d/10periodic
+  sudo: true
 
 - name: Make sure unattended-upgrades only installs from $ubuntu_release-security
   action: lineinfile dest=/etc/apt/apt.conf.d/50unattended-upgrades regexp="trusty-updates" state=absent
+  sudo: true
  
 - name: Setup ufw
   action: shell ufw allow 22/tcp
+  sudo: true
  
 #- name: Setup ufw
 #  action: shell ufw allow 443/tcp
+  sudo: true
  
 - name: Enable ufw
   action: shell echo 'y' | ufw enable
+  sudo: true
  
 #- name: Disallow root SSH access
 #  action: lineinfile dest=/etc/ssh/sshd_config regexp="^PermitRootLogin" line="PermitRootLogin no" state=present
+  sudo: true

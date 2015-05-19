@@ -3,8 +3,8 @@ users_groups:
   gid: 1500
 - name: api
   gid: 1501
-#- name: administrators
-#  gid: 1502
+- name: administrators
+  gid: 1502
 - name: sudo
   gid: 1503
 - name: developers

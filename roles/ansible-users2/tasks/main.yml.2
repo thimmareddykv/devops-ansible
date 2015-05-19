@@ -32,13 +32,11 @@
 
 - name: Deleted user removal
   user: name="{{item.username}}" state=absent
-  ignore_errors: yes
   with_items: users_deleted
   tags: ['users','configuration']
 
 - name: Deleted per-user group removal
   group: name="{{item.username}}" state=absent
-  ignore_errors: yes
   with_items: users_deleted
   when: users_create_per_user_group
   tags: ['users','configuration']

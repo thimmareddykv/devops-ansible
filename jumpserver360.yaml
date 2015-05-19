@@ -113,15 +113,24 @@
   user: ec2-user
   #user: ubuntu
   gather_facts: true
+  vars: 
 
   tasks:
-     - name: Check NTP service
-       service: name=ntpd state=started
+#    - include: includes/users.yaml
+#    - include: includes/groups.yaml
+#    - include: includes/keys.yaml
+
+#     - name: Check NTP service
+#       service: name=ntpd state=started
 
   roles:
-    - { role: common, tags: "common" }
-    - { role: jumpserver, tags: "jumpserver" }
-    - { role: ansible-users, tags: "ansible-users" }
+#    - { role: common, tags: "common", sudo: yes }
+#    - { role: jumpserver, tags: "jumpserver", sudo: yes }
+#    - { role: ansible-users, tags: "ansible-users", sudo: yes, includes/users.yaml, includes/groups.yaml, includes/keys.yaml }
+#    - { role: ansible-users, tags: "ansible-users", sudo: yes, group_vars/user_test }
+#    - { role: ansible-users, tags: "ansible-users", sudo: yes, includes/users2.yaml }
+#    - { role: ansible-users, tags: "ansible-users", sudo: yes }
+    - { role: ansible-users2, tags: "ansible-users2", sudo: yes }
 #    - include: includes/users.yaml
 #    - include: includes/groups.yaml
 #    - include: includes/keys.yaml

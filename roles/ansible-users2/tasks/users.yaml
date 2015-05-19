@@ -1,0 +1,69 @@
+---  
+users:
+- name: jaytischler
+  comment: Jay
+  password: ''
+  is_admin: yes
+  groups:
+    - devops
+    - administrators
+- name: craigpfeffer
+  comment: Craig
+  password: ''
+  is_admin: yes
+  groups:
+    - devops
+    - administrators
+- name: jonathanbaugh
+  comment: Jonathan
+  password: ''
+  is_admin: yes
+  groups:
+    - devops
+    - administrators
+    - api
+- name: michaelgaudet
+  comment: Michael
+  password: ''
+  is_admin: yes
+  groups:
+    - devops
+    - administrators
+    - api
+- name: jebkirubakaran
+  comment: Jeb
+  password: ''
+  is_admin: yes
+  groups:
+    - devops
+    - administrators
+    - api
+    - developers
+- name: danwalker
+  comment: Dan
+  password: ''
+  is_admin: yes
+  groups:
+    - devops
+- name: frankandvictor
+  comment: frankandvictor
+  password: ''
+  is_admin: no
+  groups:
+    - developers
+- name: samirpatel
+  comment: Samir
+  password: ''
+  is_admin: no
+  groups:
+    - api
+    - developers
+- name: tynakiefer
+  comment: tynakiefer
+  password: ''
+  is_admin: no
+  groups:
+    - developers
+# How to delete a user
+#- name: bobbyhill
+#  state: absent

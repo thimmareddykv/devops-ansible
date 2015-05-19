@@ -1,0 +1,79 @@
+---  
+users:
+  - username: jaytischler
+    name: Jay
+    uid: 1202
+    ssh_key:
+      - "ssh-rsa AAAAA.... foo@machine"
+    password: ''
+    is_admin: yes
+    groups:
+      - devops
+      - administrators
+- username: craigpfeffer
+  name: Craig
+  uid: 1203
+  password: ''
+  is_admin: yes
+  groups:
+    - devops
+    - administrators
+- username: jonathanbaugh
+  name: Jonathan
+  uid: 1204
+  password: ''
+  is_admin: yes
+  groups:
+    - devops
+    - administrators
+    - api
+- username: michaelgaudet
+  name: Michael
+  uid: 1205
+  password: ''
+  is_admin: yes
+  groups:
+    - devops
+    - administrators
+    - api
+- username: jebkirubakaran
+  name: Jeb
+  uid: 1206
+  password: ''
+  is_admin: yes
+  groups:
+    - devops
+    - administrators
+    - api
+    - developers
+- username: danwalker
+  name: Dan
+  uid: 1207
+  password: ''
+  is_admin: yes
+  groups:
+    - devops
+- username: frankandvictor
+  name: frankandvictor
+  uid: 1208
+  password: ''
+  is_admin: no
+  groups:
+    - developers
+- username: samirpatel
+  name: Samir
+  password: ''
+  is_admin: no
+  groups:
+    - api
+    - developers
+- username: tynakiefer
+  name: tynakiefer
+  password: ''
+  is_admin: no
+  groups:
+    - developers
+users_deleted:
+  - username: bar
+    name: Bar User
+    uid: 1002
