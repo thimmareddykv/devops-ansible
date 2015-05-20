@@ -10,21 +10,26 @@
 #   export AWS_SECRET_ACCESS_KEY=
 
 # Examples:
-#  *** REPLACE DDMMYYYYa IN THESE EXAMPLES ***
-
-#    ansible-playbook jumpserver360.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-jumpserver-`date '+%Y%m%d'` server_name=devops-bastion-a role=jump_server instance_count=1"
-#    ansible-playbook jumpserver360.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-bastion-`date '+%Y%m%d'`-tmp1 server_name=devops-bastion-tmp1 role=jump_server instance_count=1" -vvvv
-#    ansible-playbook jumpserver-launch-instance.yaml -i hosts/local-binpy.ini --extra-vars "counter_tag=devops-jumpserver-`date '+%Y%m%d'` server_name=devops-bastion-a role=app_server instance_count=1 instance_type=t2.micro"
-#    ansible-playbook jumpserver-launch-instance.yaml -i hosts/local-binpy.ini --extra-vars "counter_tag=devops-jumpserver-`date '+%Y%m%d'` server_name=devops-bastion-a role=app_server instance_count=1 instance_type=t2.micro"
-
-# TODOs:
-#   Fix "report instances to user" to check for id before printing to avoid errors
-#   Need to automate adding elastic ip to newly launched server
-#   Make vars: image: a global variable since it is a standard (BEWARE: make sure it works on Tower)
-
+#
+#  TESTING
+#    ansible-playbook jumpserver360.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-bastion-`date '+%Y%m%d'` server_name=devops:shared:bastion-tmp1 role=jump_server instance_count=1"
+#    ansible-playbook jumpserver360.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-bastion-`date '+%Y%m%d'`-tmp1 server_name=devops:shared:bastion-tmp1 role=jump_server instance_count=1" -vvvv
+#
+# PRODUCTION
+# bastion-a
+#    ansible-playbook jumpserver360.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-bastion-a server_name=devops:shared:bastion-a role=jump_server instance_count=1 vpc_subnet_id=subnet-d47effff"
+#
+# bastion-b
+#    ansible-playbook jumpserver360.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-bastion-b server_name=devops:shared:bastion-b role=jump_server instance_count=1 vpc_subnet_id=subnet-72ee9505"
+#
 # WARNINGS:
 #   counter_tag is used to limit number of servers launched.
 #   Make counter_tag unique per deployment if you're rotating servers in and out of a load balancer
+
+  pre_tasks:
+    - name: Check for variable node_environment
+      fail: msg="I think you did not read the preconditions, you are fully unqualified to be running this"
+      when: "'vpc_subnet_id' is not defined"
 
 - name: Launch/configure app server instance
   hosts: 127.0.0.1
@@ -43,8 +48,13 @@
     #sage_aws_group: devops-default-vpc
     aws_group: allow-wfm-ssh
     #vpc_subnet_id: subnet-ced06eb9  # Testing Subnet
-    vpc_subnet_id: subnet-d47effff  # bastion a
+    #vpc_subnet_id: subnet-d47effff  # bastion a
     #vpc_subnet_id: subnet-72ee9505   # bastion b
+
+#  pre_tasks:
+#    - name: Check for variable node_environment
+#      fail: msg="I think you did not read the preconditions, you are unqualified to be running this"
+#      when: "'vpc_subnet_id' is not defined"
 
   tasks:
     - name: Launch server
@@ -123,11 +133,8 @@
 #       service: name=ntpd state=started
 
   roles:
-#    - { role: common, tags: "common", sudo: yes }
-#    - { role: jumpserver, tags: "jumpserver", sudo: yes }
-#    - { role: ansible-users, tags: "ansible-users", sudo: yes, includes/users.yaml, includes/groups.yaml, includes/keys.yaml }
-#    - { role: ansible-users, tags: "ansible-users", sudo: yes, group_vars/user_test }
-#    - { role: ansible-users, tags: "ansible-users", sudo: yes, includes/users2.yaml }
+    - { role: common, tags: "common", sudo: yes }
+    - { role: jumpserver, tags: "jumpserver", sudo: yes }
 #    - { role: ansible-users, tags: "ansible-users", sudo: yes }
     - { role: ansible-users2, tags: "ansible-users2", sudo: yes }
 #    - include: includes/users.yaml

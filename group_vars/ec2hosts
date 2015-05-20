@@ -5,7 +5,7 @@
 #- name: alice
 #  comment: Alice
 #  password: '$6$hE1TkH.X$59flUhXGiL8tI4lOioqp1FxN8L8HrMbuP4ZFVbv5MnyeQFAhIAsbTmT6t7.p93FgyiJo3U/aJeiGHzCTUvA.s.'
-#  is_admin: yes
+#  is_admin: yes      # This equates to sudo group
 #  groups:
 #    - devs
 #    - mgmt
@@ -16,65 +16,65 @@ users:
 - name: jaytischler
   comment: Jay
   password: ''
-  is_admin: yes
+  #is_admin: yes
   groups:
     - devops
-    - administrators
+    - sudo
 - name: craigpfeffer
   comment: Craig
   password: ''
-  is_admin: yes
+  #is_admin: yes
   groups:
     - devops
-    - administrators
+    - sudo
 - name: jonathanbaugh
   comment: Jonathan
   password: ''
-  is_admin: yes
+  #is_admin: yes
   groups:
     - devops
-    - administrators
+    - sudo
     - api
 - name: michaelgaudet
   comment: Michael
   password: ''
-  is_admin: yes
+  #is_admin: yes
   groups:
     - devops
-    - administrators
+    - sudo
     - api
 - name: jebkirubakaran
   comment: Jeb
   password: ''
-  is_admin: yes
+  #is_admin: yes
   groups:
     - devops
-    - administrators
+    - sudo
     - api
     - developers
 - name: danwalker
   comment: Dan
   password: ''
-  is_admin: yes
+  #is_admin: yes
   groups:
     - devops
 - name: frankandvictor
   comment: frankandvictor
   password: ''
-  is_admin: no
+  #is_admin: no
   groups:
     - developers
 - name: samirpatel
   comment: Samir
   password: ''
-  is_admin: no
+  #is_admin: no
   groups:
     - api
     - developers
 - name: tynakiefer
   comment: tynakiefer
   password: ''
-  is_admin: no
+  #is_admin: no
   groups:
     - developers
 # How to delete a user
@@ -85,8 +85,6 @@ users_groups:
   gid: 1500
 - name: api
   gid: 1501
-- name: administrators
-  gid: 1502
 - name: sudo
   gid: 1503
 - name: developers
