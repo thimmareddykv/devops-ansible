@@ -1,4 +1,5 @@
 ---  
+# ec2hosts allows us to effictivly have new AWS hosts added to a dynamic hosts file refrenced as ec2hosts (ie hosts/ec2hosts)
 ######################### SAMPLE ###################
 #users:
 #- name: alice

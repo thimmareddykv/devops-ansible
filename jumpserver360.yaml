@@ -13,6 +13,7 @@
 #  *** REPLACE DDMMYYYYa IN THESE EXAMPLES ***
 
 #    ansible-playbook jumpserver360.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-jumpserver-`date '+%Y%m%d'` server_name=devops-bastion-a role=jump_server instance_count=1"
+#    ansible-playbook jumpserver360.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-bastion-`date '+%Y%m%d'`-tmp1 server_name=devops-bastion-tmp1 role=jump_server instance_count=1" -vvvv
 #    ansible-playbook jumpserver-launch-instance.yaml -i hosts/local-binpy.ini --extra-vars "counter_tag=devops-jumpserver-`date '+%Y%m%d'` server_name=devops-bastion-a role=app_server instance_count=1 instance_type=t2.micro"
 #    ansible-playbook jumpserver-launch-instance.yaml -i hosts/local-binpy.ini --extra-vars "counter_tag=devops-jumpserver-`date '+%Y%m%d'` server_name=devops-bastion-a role=app_server instance_count=1 instance_type=t2.micro"
 
@@ -28,7 +29,7 @@
 - name: Launch/configure app server instance
   hosts: 127.0.0.1
   connection: local
-#  gather_facts: false
+  gather_facts: false
 
   vars:
     instance_type: "t2.micro"   
@@ -113,8 +114,6 @@
   user: ec2-user
   #user: ubuntu
   gather_facts: true
-  vars: 
-
   tasks:
 #    - include: includes/users.yaml
 #    - include: includes/groups.yaml
