@@ -26,10 +26,10 @@
 #   counter_tag is used to limit number of servers launched.
 #   Make counter_tag unique per deployment if you're rotating servers in and out of a load balancer
 
-  pre_tasks:
-    - name: Check for variable node_environment
-      fail: msg="I think you did not read the preconditions, you are fully unqualified to be running this"
-      when: "'vpc_subnet_id' is not defined"
+#  pre_tasks:
+#    - name: Check for variable node_environment
+#      fail: msg="I think you did not read the preconditions, you are fully unqualified to be running this"
+#      when: "'vpc_subnet_id' is not defined"
 
 - name: Launch/configure app server instance
   hosts: 127.0.0.1
@@ -125,20 +125,11 @@
   #user: ubuntu
   gather_facts: true
   tasks:
-#    - include: includes/users.yaml
-#    - include: includes/groups.yaml
-#    - include: includes/keys.yaml
-
-#     - name: Check NTP service
-#       service: name=ntpd state=started
 
   roles:
     - { role: common, tags: "common", sudo: yes }
     - { role: jumpserver, tags: "jumpserver", sudo: yes }
 #    - { role: ansible-users, tags: "ansible-users", sudo: yes }
     - { role: ansible-users2, tags: "ansible-users2", sudo: yes }
-#    - include: includes/users.yaml
-#    - include: includes/groups.yaml
-#    - include: includes/keys.yaml
 
 # TODO: need to automate adding elastic ip to newly launched server

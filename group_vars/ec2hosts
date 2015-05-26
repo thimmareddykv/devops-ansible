@@ -77,6 +77,14 @@ users:
   #is_admin: no
   groups:
     - developers
+- name: service-tower
+  comment: service-tower
+  password: ''
+  #is_admin: no
+- name: ubuntu
+  comment: ubuntu
+  password: '$6$NjsPot/E$bVwycS403QEkC/hAQ1uivCxaxtTWyHSttcRrYylDhtyGav1IrMTATUbz/5TNfp2FiOwCWLhUhTsmzcIsTkTEB/'
+  is_admin: no
 # How to delete a user
 #- name: bobbyhill
 #  state: absent
@@ -105,6 +113,9 @@ users_ssh_keys:
 - name: danwalker
   keys:
     - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDFcfwhsv7q88BVrFyuFhTIDI/IaVrWzcoIyPHj7vqhHjSz/ycRp7RjvDpMQviNcl6Oed+zNS1J7DwAwa0rVj6scOtH/w3EcYHr3tZAXY80EnkYIvsW1Avpj4C1FEu7jRWMDkhpl/II8cO3uQMoaLTPDMgQOgreD2iQYI25gsYn3K+63HpM1nwWQ3Isgwot8r0mHIK3FNZsDzvLp+pgWnSF8QiFneOjFqSnnin982md7Z75bqjHNxLiGyk1qjbswN2yoe9TTsSGt1s7uRjtNmQeMdbzuYATwtPSmgYygwD1In3JZE3VSiWBoR8VomJLNMuZLWBzznx0WswTYOIHueuWnKI0M8uTQJXq4D+s6U3WTcmo2k9MOwW+6T8AukQFmrYBdUkfeZmvhoyx+2Xg+GMroTvoqH5+DwYKJSkpl5kwZ04qE0nBwWZLLfzrjKFS1EJsNvXs9EtGoS4sE6nZZHF/OnntJdis/4Cpdk6jEfirJgzt8eAjdAM7p0K4LZeITOAr0vm5yJK1jnBpDnNzlWDzulxDg23V8YfRQfecCsJjdgZI5vvt1cDgLyUqPsBSZxfu6I4Uq+3UCLw39S9APG/9uCdI1YSWs7LZrfcTlfzrW/8bwFCNhtcShWG+/0RRSKKmiGAMifdzCjRBxOpMvT6lL2KV9xW9PcMbD5C/1rkEsw== dan.walker@Dans-Mac-Book-Pro"
+- name: service-tower
+  keys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQD2TeTXeBvsMMydPKhat5hpG1w1/TdjttDoWt+hyy0m8N/DXyFBMiMUyObG8P27bZ74iZ6epgkDxyaMGIwfWzn5YXILy4QZT5ZYxaKH3O5RP4X/0fWCqElz5k6NmkzPYmlhn5h2kKnB6fENO4mXUJifPPrnkY/DY+OU6rOMmozsSE6M1YGsSW95KuvTU8/E78WYNemFZ/b/sn0ahw9a+dfAeHTaFPYcpHomUNNL65NIiGtnuH+YnQ6vHCk0vNQPx5my7BQnvZEowLjAhhHdhN63l6t8E1fgBSo1pWA/Vpd8LjHnsMd2kuGLRwc60AeWZ6KntJrCVnxDycSq7127/avP8dnFBasQMylTKVHnBk0OpPrg39IDP6W3hoCY9xU9aWpqDwpwJTOxPUq1fi5XGGb5K6sJ+b8Cb5L/NpB3b9bqhmojBz261K6aJd4yLduq3Q1W2uUD1+kM3Gn05A181HT91jvx4Ib9x0tCPDezsQvgTlMZdDupe7i2EHqJMmGCU7R3R6D0m/XJmFdspf1mGTdzvItPdn2Gzxla+ccZV95WKfHewECgRiN1et3ddrfgKo5lLxoWV/GGICNONBR1i5UfKNiuggN2MAo+fYaD/X2smDirx8JY4B9k6EXVqw8k7TddmQxNUbGooqKTTSgS+aHNbPLO5eqQJSvQ4CwWO5x29Q== devops@wholefoods.com
 #- name: jebkirubakaran
 #  keys:
 #    - ssh-rsa AAAA.....alice@elsewhere.com
