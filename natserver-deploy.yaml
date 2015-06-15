@@ -1,0 +1,42 @@
+---
+# file: devops-ansible/natserver.yaml
+# Examples:
+#   ansible-playbook -vvvv -i hosts/natservers.ini natserver-deploy.yaml -e "@includes/users.yaml" -e "@includes/groups.yaml" -e "@includes/keys.yaml"
+#   ansible-playbook -vvvv -i hosts/natservers.ini natserver-deploy.yaml
+#   (SUMO) ansible-playbook -vvvv -i hosts/natservers.ini natserver-deploy.yaml -e "@includes/users.yaml" -e "@includes/groups.yaml" -e "@includes/keys.yaml dosumo=yay" --vault-password-file="~/.vault_pass.txt" 
+
+
+
+
+- hosts: natservers
+  name: configuration play
+  user: ec2-user
+  gather_facts: true
+ # tasks:
+
+  roles:
+    - { role: common, tags: "common", sudo: yes }
+
+  vars:
+    ansible_distribution: CentOS
+
+#    users_admin_sudo_password: false
+#  roles:
+#  - role: ansible-users
+#    users:
+#    - name: carl
+#      uid: 1010
+#      comment: 'Carl Crisp'
+#      is_admin: yes
+#      groups:
+#      - beancounters
+#    - name: ec_user
+#      state: absent
+#    users_groups:
+#    - name: beancounters
+#    users_ssh_keys:
+#    - name: carl
+#      keys:
+#      - ssh-rsa AAAA....... carl@accounts.example.com
+
+  #  - include: includes/users.yaml

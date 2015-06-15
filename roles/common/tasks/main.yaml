@@ -5,6 +5,35 @@
 - name: Updating Packages
   apt: update_cache=yes cache_valid_time=3600 upgrade=safe #only update if has not run in last hour
   tags: system
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Updating Packages
+  yum: name={{item}} state=present
+  with_items:
+  - git
+  - finger
+  - yum-updatesd
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: Configure yum-updatesd do_update
+  action: lineinfile dest=/etc/yum/yum-updatesd.conf regexp="^do_update" line="do_update = yes" state=present
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: Configure yum-updatesd do_download
+  action: lineinfile dest=/etc/yum/yum-updatesd.conf regexp="^do_download" line="do_download = yes" state=present
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: Configure yum-updatesd do_download_deps
+  action: lineinfile dest=/etc/yum/yum-updatesd.conf regexp="^do_download_deps" line="do_download_deps = yes" state=present
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: Configure yum-updatesd email_to
+  action: lineinfile dest=/etc/yum/yum-updatesd.conf regexp="^email_to" line="email_to = jay.tischler@wholefoods.com" state=present
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: Configure yum-updatesd email_from
+  action: lineinfile dest=/etc/yum/yum-updatesd.conf regexp="^email_to" line="email_to = nat-updater@wholefoods.com" state=present
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - name: Install list of packages
   apt: pkg={{item}} state=installed
@@ -13,12 +42,15 @@
   - finger
 #  - fail2ban
   - unattended-upgrades
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Copy 50unattended-upgrades into /etc/apt/apt.conf.d
   action: copy src=50unattended-upgrades dest=/etc/apt/apt.conf.d/50unattended-upgrades force=yes
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Copy 20auto-upgrades into /etc/apt/apt.conf.d
   action: copy src=20auto-upgrades dest=/etc/apt/apt.conf.d/20auto-upgrades
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 #- name: Disallow password authentication
 #  action: lineinfile dest=/etc/ssh/sshd_config regexp="^PasswordAuthentication" line="PasswordAuthentication no" state=present
@@ -26,9 +58,11 @@
  
 - name: Adjust APT update intervals
   action: copy src=apt_periodic dest=/etc/apt/apt.conf.d/10periodic
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Make sure unattended-upgrades only installs from $ubuntu_release-security
   action: lineinfile dest=/etc/apt/apt.conf.d/50unattended-upgrades regexp="trusty-updates" state=absent
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
  
 - name: Setup ufw
   action: shell ufw allow 22/tcp
