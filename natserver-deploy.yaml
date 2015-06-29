@@ -1,8 +1,9 @@
 ---
 # file: devops-ansible/natserver.yaml
 # Examples:
-#   ansible-playbook -vvvv -i hosts/natservers.ini natserver-deploy.yaml -e "@includes/users.yaml" -e "@includes/groups.yaml" -e "@includes/keys.yaml"
 #   ansible-playbook -vvvv -i hosts/natservers.ini natserver-deploy.yaml
+#
+#   ansible-playbook -vvvv -i hosts/natservers.ini natserver-deploy.yaml -e "@includes/users.yaml" -e "@includes/groups.yaml" -e "@includes/keys.yaml"
 #   (SUMO) ansible-playbook -vvvv -i hosts/natservers.ini natserver-deploy.yaml -e "@includes/users.yaml" -e "@includes/groups.yaml" -e "@includes/keys.yaml dosumo=yay" --vault-password-file="~/.vault_pass.txt" 
 
 

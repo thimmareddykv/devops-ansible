@@ -11,7 +11,6 @@
   yum: name={{item}} state=present
   with_items:
   - vim
-  - git
   - finger
   - yum-updatesd
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
@@ -39,9 +38,8 @@
 - name: Install list of packages
   apt: pkg={{item}} state=installed
   with_items:
-  - git
   - finger
-#  - fail2ban
+  - vim
   - unattended-upgrades
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
@@ -53,10 +51,6 @@
   action: copy src=20auto-upgrades dest=/etc/apt/apt.conf.d/20auto-upgrades
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-#- name: Disallow password authentication
-#  action: lineinfile dest=/etc/ssh/sshd_config regexp="^PasswordAuthentication" line="PasswordAuthentication no" state=present
-#  notify: restart ssh
- 
 - name: Adjust APT update intervals
   action: copy src=apt_periodic dest=/etc/apt/apt.conf.d/10periodic
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
@@ -64,24 +58,3 @@
 - name: Make sure unattended-upgrades only installs from $ubuntu_release-security
   action: lineinfile dest=/etc/apt/apt.conf.d/50unattended-upgrades regexp="trusty-updates" state=absent
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
- 
-#- name: Setup ufw
-#  action: shell ufw allow 22/tcp
-#  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
- 
-#- name: Setup ufw
-#  action: shell ufw allow 443/tcp
- 
-#- name: Enable ufw
-#  action: shell echo 'y' | ufw enable
-#  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
- 
-- name: Disallow root SSH access
-  action: lineinfile dest=/etc/ssh/sshd_config regexp="^PermitRootLogin" line="PermitRootLogin no" state=present
-
-
-# We do not need sudo for the nat servers as no users will be deployed here.
-
-#- name: Update Sudo access for sudo group
-#  action: lineinfile dest=/etc/sudoers regexp="^%sudo ALL=(ALL:ALL) ALL" line="%sudo ALL=(ALL) NOPASSWD:ALL" state=present
-#  action: lineinfile dest=/etc/sudoers regexp="^%s\sALL=\(ALL:ALL\)\s+ALL" line="%sudo ALL=(ALL) NOPASSWD:ALL" state=present

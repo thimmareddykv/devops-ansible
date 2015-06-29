@@ -1,0 +1,22 @@
+---
+# file: devops-ansible/harden.yaml
+# Examples:
+#   ansible-playbook -vvvv -i hosts/harden.ini harden-server.yaml --extra-vars "ssh-user=ec2-user ansible-distribution=CentOS"
+#   ansible-playbook -vvvv -i hosts/harden.ini harden-server.yaml --extra-vars "ssh-user=ubuntu ansible-distribution=ubuntu"
+#
+#   ansible-playbook -vvvv -i hosts/harden.ini harden-server.yaml -e "@includes/users.yaml" -e "@includes/groups.yaml" -e "@includes/keys.yaml"
+
+
+
+
+- hosts: harden
+  name: Server Hardening
+  user: { ssh-user }
+  gather_facts: true
+ # tasks:
+
+  roles:
+    - { role: common, tags: "common", sudo: yes }
+
+  vars:
+   # ansible_distribution: CentOS
