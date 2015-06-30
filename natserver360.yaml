@@ -132,7 +132,8 @@
   tasks:
 
   roles:
-    - { role: common, tags: "common", sudo: yes }
+    - { role: auto-updates, tags: "auto-updates", sudo: yes }
+#    - { role: common, tags: "common", sudo: yes }
 #    - { role: natserver, tags: "natserver", sudo: yes }
 #    - { role: ansible-users, tags: "ansible-users", sudo: yes }
 #    - { role: ansible-users2, tags: "ansible-users2", sudo: yes }

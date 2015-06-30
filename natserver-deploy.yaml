@@ -1,43 +1,21 @@
 ---
 # file: devops-ansible/natserver.yaml
 # Examples:
-#   ansible-playbook -vvvv -i hosts/natservers.ini natserver-deploy.yaml
-#
-#   ansible-playbook -vvvv -i hosts/natservers.ini natserver-deploy.yaml -e "@includes/users.yaml" -e "@includes/groups.yaml" -e "@includes/keys.yaml"
-#   (SUMO) ansible-playbook -vvvv -i hosts/natservers.ini natserver-deploy.yaml -e "@includes/users.yaml" -e "@includes/groups.yaml" -e "@includes/keys.yaml dosumo=yay" --vault-password-file="~/.vault_pass.txt" 
-
-
+#   ansible-playbook -vvvv -i hosts/natservers.ini natserver-deploy.yaml --extra-vars "ansible_distribution=CentOS"
+#   ansible-playbook -vvvv -i hosts/natservers.ini natserver-deploy.yaml --extra-vars "ansible_distribution=Ubuntu"
+#   
+# Common Problems:
+#    ansible_distribution variable does not get set from hosts/natserver.ini file
 
 
 - hosts: natservers
   name: configuration play
-  user: ec2-user
+#  user: ec2-user
   gather_facts: true
  # tasks:
 
   roles:
-    - { role: common, tags: "common", sudo: yes }
+    - { role: auto-updates, tags: "auto-updates", sudo: yes }
 
   vars:
     ansible_distribution: CentOS
-
-#    users_admin_sudo_password: false
-#  roles:
-#  - role: ansible-users
-#    users:
-#    - name: carl
-#      uid: 1010
-#      comment: 'Carl Crisp'
-#      is_admin: yes
-#      groups:
-#      - beancounters
-#    - name: ec_user
-#      state: absent
-#    users_groups:
-#    - name: beancounters
-#    users_ssh_keys:
-#    - name: carl
-#      keys:
-#      - ssh-rsa AAAA....... carl@accounts.example.com
-
-  #  - include: includes/users.yaml
