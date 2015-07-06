@@ -16,7 +16,7 @@
  # tasks:
 
   roles:
-    - { role: common, tags: "common", sudo: yes }
+    - { role: auto-upgrades, tags: "auto-upgrades", sudo: yes }
 
   vars:
    # ansible_distribution: CentOS
