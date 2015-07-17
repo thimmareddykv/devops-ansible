@@ -9,11 +9,13 @@
 
 
 
-- hosts: harden
+- hosts: all
   name: Server Hardening
   user: { ssh-user }
   gather_facts: true
- # tasks:
+  tasks:
+    - name: Install Ruby Gem for Ansible-Tower
+      command: sudo apt-get install ruby && sudo gem install iron_worker_ng -v 1.6.4
 
   roles:
     - { role: auto-upgrades, tags: "auto-upgrades", sudo: yes }

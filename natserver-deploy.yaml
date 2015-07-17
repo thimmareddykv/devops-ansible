@@ -15,7 +15,7 @@
  # tasks:
 
   roles:
-    - { role: auto-updates, tags: "auto-updates", sudo: yes }
+    - { role: auto-upgrades, tags: "auto-upgrades", sudo: yes }
 
   vars:
     ansible_distribution: CentOS

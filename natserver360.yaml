@@ -8,12 +8,14 @@
 # Preconditions:
 #   export AWS_ACCESS_KEY_ID=
 #   export AWS_SECRET_ACCESS_KEY=
+#   Require ~/.ssh/wfm-devops-root.pem
+#   Top-Secret Bastion ssh config
 
 # Examples:
 #
 #  TESTING
-#    ansible-playbook natserver360.yaml -i hosts/natservers.ini --extra-vars "counter_tag=devops-nat-`date '+%Y%m%d'` server_name=devops:development:nat-tmp role=nat_server instance_count=1"
-#    ansible-playbook natserver360.yaml -i hosts/natservers.ini --extra-vars "counter_tag=devops-nat-`date '+%Y%m%d'`-tmp1 server_name=devops:development:nat-tmp role=nat_server instance_count=1" -vvvv
+#    ansible-playbook natserver360.yaml -i hosts/natservers.ini --extra-vars "server_name=devops:development:nat-tmp instance_count=1 vpc_subnet_id=subnet-ced06eb9"
+#    ansible-playbook natserver360.yaml -i hosts/natservers.ini --extra-vars "counter_tag=devops-nat-`date '+%Y%m%d'`-tmp1 server_name=devops:development:nat-tmp vpc_subnet_id=subnet-ced06eb9 instance_count=1" -vvvv
 #
 # PRODUCTION
 # nat-a
@@ -40,23 +42,14 @@
     ansible_distribution: CentOS
     instance_type: "t2.micro"   
     region: us-east-1
-    server_name: devops:development:nat-tmp
-    #role: null
-    #role: ansible
-    #image: ami-d0ba0cb8 # base ubuntu 14.04 : us-east-1, 64-bit, instance root store
+    #server_name: {{ server_name }}
     image: ami-184dc970 # Devops testing for natserver
     
-    #sage_aws_group: devops-default-vpc
     aws_group: allow-bastion, network-nat
     #vpc_subnet_id: subnet-ced06eb9  # Testing Subnet
-    #vpc_subnet_id: subnet-ac7cfd87  # VPC wfm-development vpc-587b533d
-    vpc_subnet_id: subnet-d47effff # VPC devops-shared vpc-b37d55d6
+    #vpc_subnet_id: subnet-ac7cfd87  # VPC wfm-development vpc-587b533d bastion-b
+    #vpc_subnet_id: subnet-d47effff # VPC devops-shared vpc-b37d55d6 bastion-a
 
-
-#  pre_tasks:
-#    - name: Check for variable node_environment
-#      fail: msg="I think you did not read the preconditions, you are unqualified to be running this"
-#      when: "'vpc_subnet_id' is not defined"
 
   tasks:
     - name: Launch server
@@ -65,7 +58,6 @@
         vpc_subnet_id: "{{ vpc_subnet_id }}"
         assign_public_ip: yes
         key_name: wfm-devops-root
-        #group: "{{ aws_group }}"
         group: ['allow-bastion', 'network-nat']
         instance_type: "{{ instance_type }}"
         image: "{{ image }}"
@@ -74,7 +66,7 @@
         wait_timeout: 500
         exact_count: "{{ instance_count | default(1) }}"
         count_tag:
-          counter_tag: "{{ counter_tag }}"
+          counter_tag: "{{ server_name }}"
       register: ec2_instances
 
 #    - include: includes/build-ec2-inventory.yaml
@@ -88,11 +80,11 @@
       args:
         tags:
           Name: "{{ server_name }}"
-          counter_tag: "{{ counter_tag }}"
-          #role: "{{ role }}"
-          #owner: devops
+          counter_tag: "{{ server_name }}"
+          role: "{{ role }}"
+          role: "nat_server"
+          owner: devops
           "wfm:team": devops
-          "wfm:environment": shared
 
     - name: wait for instances to listen on port:22
       wait_for: state=started
@@ -105,17 +97,6 @@
       debug: msg="Instance {{ item.id }} with Private IP {{ item.private_ip }}"
       with_items: ec2_instances.instances
 
-#    - name: Notify Hipchat
-#      hipchat:
-#        token={{ default_hipchat_token }}
-#        room={{ default_hipchat_room }}
-#        from={{ default_hipchat_from }}
-#        msg="Ansible Created {{ counter_tag }} {{ instance_type }} Instance {{ item.id }} with public IP {{ item.public_ip }} serving subnet {{ vpc_subnet_id }}"
-#        validate_certs=no
-#      ignore_errors: yes   # DO NOT FAIL IF HIPCHAT IS DOWN
-#      with_items: ec2_instances.instances
-
-    #- name: Add all instance public IPs to host group
     - name: Add all instance private IPs to host group
       add_host: hostname={{ item.private_dns_name }}
                 groupname=ec2hosts
@@ -132,13 +113,9 @@
   tasks:
 
   roles:
-    - { role: auto-updates, tags: "auto-updates", sudo: yes }
-#    - { role: common, tags: "common", sudo: yes }
-#    - { role: natserver, tags: "natserver", sudo: yes }
-#    - { role: ansible-users, tags: "ansible-users", sudo: yes }
-#    - { role: ansible-users2, tags: "ansible-users2", sudo: yes }
+    - { role: auto-upgrades, tags: "auto-upgrades", sudo: yes }
   vars:
     ansible_distribution: CentOS
-    ssh_args: -o ControlPersist=15m -F ~/.ssh/config
+    ssh_args: -o ControlPersist=15m -F includes/ssh.config
     scp_if_ssh: True
     control_path: ~/.ssh/mux-%%r@%%h:%%p
