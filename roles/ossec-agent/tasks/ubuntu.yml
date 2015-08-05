@@ -1,0 +1,14 @@
+---
+#
+
+#- name: ubuntu | Set some facts
+
+- name: ubuntu | Installing repository ubuntu
+#  shell: \"echo deb http://ossec.wazuh.com/repos/apt/ubuntu trusty main\" >> /etc/apt/sources.list
+  lineinfile: "dest=/etc/apt/sources.list state=present regexp='' line='deb http://ossec.wazuh.com/repos/apt/ubuntu trusty main'"
+
+- name: ubuntu | Install repository key
+  apt_key: url=http://ossec.wazuh.com/repos/apt/conf/ossec-key.gpg.key state=present
+
+- name: ubuntu | Install OSSEC HIDS agent
+  apt: name=ossec-hids-agent update_cache=yes cache_valid_time=3600  
