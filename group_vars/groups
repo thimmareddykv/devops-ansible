@@ -1,7 +1,0 @@
-users_groups:
-- name: devs
-  gid: 1000
-- name: mgmt
-  gid: 2000
-- name: hr
-  state: absent

@@ -14,26 +14,17 @@
 # Examples:
 #
 #  TESTING
-#    ansible-playbook natserver360.yaml -i hosts/natservers.ini --extra-vars "server_name=devops:development:nat-tmp instance_count=1 vpc_subnet_id=subnet-ced06eb9"
-#    ansible-playbook natserver360.yaml -i hosts/natservers.ini --extra-vars "counter_tag=devops-nat-`date '+%Y%m%d'`-tmp1 server_name=devops:development:nat-tmp vpc_subnet_id=subnet-ced06eb9 instance_count=1" -vvvv
+#    ansible-playbook natserver360.yaml -i hosts/natservers.ini --extra-vars "server_name=devops:development:nat-tmp vpc_subnet_id=subnet-ac7cfd87 instance_count=1" -vvvv
 #
 # PRODUCTION
 # nat-a
-#    ansible-playbook natserver360.yaml -i hosts/natservers.ini --extra-vars "counter_tag=devops-nat-a server_name=devops:shared:nat-a role=nat_server instance_count=1 vpc_subnet_id=subnet-d47effff"
+#    ansible-playbook natserver360.yaml -i hosts/natservers.ini --extra-vars "counter_tag=devops-nat-a vpc_subnet_id=subnet-d47effff instance_count=1"
 #
 # nat-b
-#    ansible-playbook natserver360.yaml -i hosts/natservers.ini --extra-vars "counter_tag=devops-nat-b server_name=devops:shared:nat-b role=nat_server instance_count=1 vpc_subnet_id=subnet-72ee9505"
+#    ansible-playbook natserver360.yaml -i hosts/natservers.ini --extra-vars "counter_tag=devops-nat-b vpc_subnet_id=subnet-72ee9505 instance_count=1"
 #
-# WARNINGS:
-#   counter_tag is used to limit number of servers launched.
-#   Make counter_tag unique per deployment if you're rotating servers in and out of a load balancer
 
-#  pre_tasks:
-#    - name: Check for variable node_environment
-#      fail: msg="I think you did not read the preconditions, you are fully unqualified to be running this"
-#      when: "'vpc_subnet_id' is not defined"
-
-- name: Launch/configure app server instance
+- name: Launch/configure nat server instance {{ server_name }}
   hosts: 127.0.0.1
   connection: local
   gather_facts: false
@@ -42,7 +33,6 @@
     ansible_distribution: CentOS
     instance_type: "t2.micro"   
     region: us-east-1
-    #server_name: {{ server_name }}
     image: ami-184dc970 # Devops testing for natserver
     
     aws_group: allow-bastion, network-nat
@@ -52,7 +42,8 @@
 
 
   tasks:
-    - name: Launch server
+    - name: Launch NAT Server
+
       local_action:
         module: ec2
         vpc_subnet_id: "{{ vpc_subnet_id }}"
@@ -66,10 +57,9 @@
         wait_timeout: 500
         exact_count: "{{ instance_count | default(1) }}"
         count_tag:
-          counter_tag: "{{ server_name }}"
+          Name: "{{ server_name }}"
       register: ec2_instances
 
-#    - include: includes/build-ec2-inventory.yaml
 
     - name: Tag instances
       local_action: ec2_tag
@@ -80,8 +70,7 @@
       args:
         tags:
           Name: "{{ server_name }}"
-          counter_tag: "{{ server_name }}"
-          role: "{{ role }}"
+          #counter_tag: "{{ server_name }}"
           role: "nat_server"
           owner: devops
           "wfm:team": devops
@@ -99,23 +88,23 @@
 
     - name: Add all instance private IPs to host group
       add_host: hostname={{ item.private_dns_name }}
-                groupname=ec2hosts
+                groupname=natservers
                 groups=ec2hosts
                 ansible_ssh_private_key_file=~/.ssh/wfm-devops-root.pem
                 ansible_ssh_user=ec2-user
+                ansible_ssh_args= -o ControlPersist=15m -F includes/ssh.config
       with_items: ec2_instances.tagged_instances
 
 - hosts: ec2hosts
   name: configuration play
   user: ec2-user
-  #user: ubuntu
   gather_facts: true
   tasks:
 
   roles:
     - { role: auto-upgrades, tags: "auto-upgrades", sudo: yes }
-  vars:
-    ansible_distribution: CentOS
-    ssh_args: -o ControlPersist=15m -F includes/ssh.config
-    scp_if_ssh: True
-    control_path: ~/.ssh/mux-%%r@%%h:%%p
+#  vars:
+    #ansible_distribution: CentOS
+    #ssh_args: -o ControlPersist=15m -F includes/ssh.config
+    #scp_if_ssh: True
+    #control_path: ~/.ssh/mux-%%r@%%h:%%p
