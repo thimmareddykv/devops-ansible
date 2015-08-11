@@ -1,9 +1,0 @@
----
-# this will be the yml file for the developers to deploy code with
-- hosts: all
-  user: ubuntu
-  sudo: true
-  vars:
-    ansible_os_family: ubuntu
-  roles:
-   - dw-wfm.ossec-agent

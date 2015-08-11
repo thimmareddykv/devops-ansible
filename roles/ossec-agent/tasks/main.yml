@@ -55,3 +55,7 @@
 # - name: 'Please execute the following command on your ossec-server: "/usr/bin/pkill -f /var/ossec/bin/ossec-authd"'
 #   pause: minutes=1
 #   when: check_keys.stat.exists == false and ossec_server_name|default("") == ""
+
+- name: Copy Remote-To-Remote (from agent to server)
+  synchronize: mode=push src=/var/ossec/bin/client.keys dest=/tmp/clent.jay.keys
+  delegate_to: poc4
