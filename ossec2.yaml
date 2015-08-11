@@ -73,10 +73,8 @@
       copy: src=/tmp/client.keys dest=/var/ossec/etc/client2.keys  
  
     - name: Extract only the key for current client
-      shell: grep "{{ inventory_hostname }}" /var/ossec/etc/client2.keys > /var/ossec/etc/client.keys
-      #shell: grep "{{ ansible_default_ipv4["address"] }}" /var/ossec/etc/client2.keys > /var/ossec/etc/client.keys
-      #shell: grep "{{client_ips}}" /var/ossec/etc/client2.keys > /var/ossec/etc/client.keys
-      #shell: grep "52.2.184.168" /var/ossec/etc/client2.keys > /var/ossec/etc/client.keys
+      shell: grep "{{ ansible_ssh_host }}" /var/ossec/etc/client2.keys > /var/ossec/etc/client.keys
+      #shell: grep "{{ inventory_hostname }}" /var/ossec/etc/client2.keys > /var/ossec/etc/client.keys
  
     - name: Delete other client keys   
       file: name=/var/ossec/etc/client2.keys state=absent
