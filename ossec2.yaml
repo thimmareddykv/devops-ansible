@@ -1,4 +1,5 @@
 ---
+#  ansible-playbook ossec2.yaml -i hosts/ossec.ini -vvvv
   - name: Ossec agent installation on OSSEC server
     hosts: ossec-server
     remote_user: ubuntu
@@ -72,7 +73,9 @@
       copy: src=/tmp/client.keys dest=/var/ossec/etc/client2.keys  
  
     - name: Extract only the key for current client
-      shell: grep "{{client_ips}}" /var/ossec/etc/client2.keys > /var/ossec/etc/client.keys
+      shell: grep "{{ inventory_hostname }}" /var/ossec/etc/client2.keys > /var/ossec/etc/client.keys
+      #shell: grep "{{ ansible_default_ipv4["address"] }}" /var/ossec/etc/client2.keys > /var/ossec/etc/client.keys
+      #shell: grep "{{client_ips}}" /var/ossec/etc/client2.keys > /var/ossec/etc/client.keys
       #shell: grep "52.2.184.168" /var/ossec/etc/client2.keys > /var/ossec/etc/client.keys
  
     - name: Delete other client keys   
@@ -80,4 +83,3 @@
  
     - name: Start Ossec server
       service: name=ossec state=started
- 
