@@ -1,44 +1,13 @@
 ---
-- name: Copy add_agent.sh script
-  copy: src=add_agent.sh dest=/tmp/add_agent.sh mode=755 owner=root group=root
-
-- name: Add agent to the server
-  shell: /tmp/add_agent.sh "{{item.hostname}}" "{{item.ip}}"
-  with_items: client_ips
-  notify: 
-  - restart ossec
-    
-- name: Get all client keys from OSSEC server to ansible server
-  fetch: src=/var/ossec/etc/client.keys dest=/tmp/client.keys flat=yes
- 
-# Handlers?
-- name: restart ossec
-  service: name=ossec state=restarted
-
-
-- name: Ossec agent installation on OSSEC client
-  hosts: ossec-client
-  user: ubuntu
-  sudo: yes
-
-  vars:
-    #ossec_url: https://github.com/ossec/ossec-hids/releases/download/v2.8.0/ossec-hids-2.8.tar.gz
-    ossec_url: http://www.ossec.net/files/ossec-hids-2.8.2.tar.gz
-    ossec_path: /tmp/ossec-hids-2.8.2
-    server_ip: 52.3.129.70
-    ossec_manage_agent_input: /tmp/ossec_manage_agent_input.txt
-    extract_path: /tmp
-
-    tasks:
-    - name: Install gcc postgres and mysql
-      apt: pkg={{item}} state=installed
-      #yum: name="{{item}}" state=present
-      with_items:
-        - gcc
-        #- postgresql-devel
-        - libpq-dev
-        #- mysql-devel
-        - libmysqld-dev
+- name: Install gcc postgres and mysql
+  apt: pkg={{item}} state=installed
+  #yum: name="{{item}}" state=present
+  with_items:
+    - gcc
+    #- postgresql-devel
+    - libpq-dev
+    #- mysql-devel
+    - libmysqld-dev
   
 - name: Download Ossec server/agent 
   get_url: url="{{ossec_url}}" dest="{{ossec_path}}".tar.gz

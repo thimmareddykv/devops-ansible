@@ -1,0 +1,35 @@
+---
+#  ansible-playbook ossec-client.yaml -i hosts/ossec.ini -vvvv
+  - name: Ossec agent installation on OSSEC server
+    hosts: ossec-server
+    remote_user: ubuntu
+    sudo: yes
+    
+    vars:
+      client_ips: 
+        - { hostname: poc0, ip: 54.175.233.234 }
+        - { hostname: poc1, ip: 52.3.132.255 }
+        - { hostname: poc2, ip: 52.2.184.168 }
+        - { hostname: poc3, ip: 52.3.131.156 }
+    roles:
+      - ossec-server
+
+    handlers:
+      - name: restart ossec
+        service: name=ossec state=restarted
+
+
+  - name: Ossec agent installation on OSSEC client
+    hosts: ossec-client
+    user: ubuntu
+    sudo: yes
+
+    vars:
+      #ossec_url: https://github.com/ossec/ossec-hids/releases/download/v2.8.0/ossec-hids-2.8.tar.gz
+      ossec_url: http://www.ossec.net/files/ossec-hids-2.8.2.tar.gz
+      ossec_path: /tmp/ossec-hids-2.8.2
+      server_ip: 52.3.129.70
+      ossec_manage_agent_input: /tmp/ossec_manage_agent_input.txt
+      extract_path: /tmp
+    roles:
+      - ossec-client
