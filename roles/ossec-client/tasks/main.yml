@@ -1,4 +1,13 @@
 ---
+- name: Add the ossec.wazuh Repository
+  lineinfile: "dest=/etc/apt/sources.list state=present regexp='' line='deb http://ossec.wazuh.com/repos/apt/ubuntu trusty main'"
+
+- name: ubuntu | Install repository key
+  apt_key: url=http://ossec.wazuh.com/repos/apt/conf/ossec-key.gpg.key state=present
+
+#- name: ubuntu | Install OSSEC HIDS agent
+#  apt: name=ossec-hids-agent update_cache=yes cache_valid_time=3600
+
 - name: Install gcc postgres and mysql
   apt: pkg={{item}} state=installed
   #yum: name="{{item}}" state=present
@@ -8,21 +17,22 @@
     - libpq-dev
     #- mysql-devel
     - libmysqld-dev
+    - ossec-hids-agent
   
-- name: Download Ossec server/agent 
-  get_url: url="{{ossec_url}}" dest="{{ossec_path}}".tar.gz
+#- name: Download Ossec server/agent 
+#  get_url: url="{{ossec_url}}" dest="{{ossec_path}}".tar.gz
  
-- name: Extract Ossec server code
-  unarchive: copy=no src="{{ossec_path}}".tar.gz dest="{{extract_path}}" creates="{{ossec_path}}"
+#- name: Extract Ossec server code
+#  unarchive: copy=no src="{{ossec_path}}".tar.gz dest="{{extract_path}}" creates="{{ossec_path}}"
  
 - name: Copy the Ossec_input file
   template: src=ossec_client_input.j2 dest="{{ossec_path}}/ossec_client_input.txt"
  
-- name: Install Ossec-agent
-  shell: ./install.sh < ossec_client_input.txt 
-  args:
-    chdir: "{{ossec_path}}"
-    creates: /var/ossec/etc/ossec.conf
+#- name: Install Ossec-agent
+#  shell: ./install.sh < ossec_client_input.txt 
+#  args:
+#    chdir: "{{ossec_path}}"
+#    creates: /var/ossec/etc/ossec.conf
  
 - name: Get the client key from server
   copy: src=/tmp/client.keys dest=/var/ossec/etc/client2.keys  
