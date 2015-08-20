@@ -7,8 +7,8 @@ users:
   groups:
     - devops
     - administrators
-- name: craigpfeffer
-  comment: Craig
+- name: dougsmith
+  comment: Doug
   password: ''
   is_admin: yes
   groups:
