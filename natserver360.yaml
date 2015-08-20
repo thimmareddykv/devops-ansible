@@ -13,16 +13,19 @@
 
 # Examples:
 #
-#  TESTING
-#    ansible-playbook natserver360.yaml -i hosts/natservers.ini --extra-vars "server_name=devops:development:nat-tmp vpc_subnet_id=subnet-ac7cfd87 instance_count=1" -vvvv
+#Test Creation of natserver
+# development:nat-tmp
+#    ansible-playbook natserver360.yaml -i hosts/natservers.ini --extra-vars "server_name=devops:development:nat-tmp vpc_subnet_id=subnet-ac7cfd87" -vvvv
 #
-# PRODUCTION
-# nat-a
-#    ansible-playbook natserver360.yaml -i hosts/natservers.ini --extra-vars "counter_tag=devops-nat-a vpc_subnet_id=subnet-d47effff instance_count=1"
+#Existing nat servers
+# development:nat
+#    ansible-playbook natserver360.yaml -i hosts/local.ini --extra-vars "server_name=devops:development:nat vpc_subnet_id=subnet-ac7cfd87" -vvvv
+# shared:nat
+#    ansible-playbook natserver360.yaml -i hosts/local.ini --extra-vars "server_name=devops:shared:nat vpc_subnet_id=subnet-d17efffa"
+# production:nat
+#    ansible-playbook natserver360.yaml -i hosts/local.ini --extra-vars "server_name=devops:production:nat vpc_subnet_id=subnet-997ffeb2"
 #
-# nat-b
-#    ansible-playbook natserver360.yaml -i hosts/natservers.ini --extra-vars "counter_tag=devops-nat-b vpc_subnet_id=subnet-72ee9505 instance_count=1"
-#
+#    ansible-playbook natserver360.yaml -i hosts/natservers.ini
 
 - name: Launch/configure nat server instance {{ server_name }}
   hosts: 127.0.0.1
@@ -35,7 +38,7 @@
     region: us-east-1
     image: ami-184dc970 # Devops testing for natserver
     
-    aws_group: allow-bastion, network-nat
+    #aws_group: [allow-bastion, network-nat]
     #vpc_subnet_id: subnet-ced06eb9  # Testing Subnet
     #vpc_subnet_id: subnet-ac7cfd87  # VPC wfm-development vpc-587b533d bastion-b
     #vpc_subnet_id: subnet-d47effff # VPC devops-shared vpc-b37d55d6 bastion-a
@@ -43,7 +46,6 @@
 
   tasks:
     - name: Launch NAT Server
-
       local_action:
         module: ec2
         vpc_subnet_id: "{{ vpc_subnet_id }}"
@@ -55,11 +57,13 @@
         region: "{{ region }}"
         wait: yes
         wait_timeout: 500
-        exact_count: "{{ instance_count | default(1) }}"
+        #exact_count: "{{ instance_count | default(1) }}"
+        exact_count: 1
         count_tag:
           Name: "{{ server_name }}"
-          "wfm:application": "nat"
-          "wfm:environment": "shared"
+          #counter_tag: {{ counter_tag }}
+          # "wfm:application": "nat"
+          # "wfm:environment": "shared"
       register: ec2_instances
 
 
@@ -79,7 +83,7 @@
           "wfm:team": devops
 
     - name: wait for instances to listen on port:22
-     # when: False
+      when: False
       wait_for: state=started
                 host={{ item.private_dns_name }}
                 port=22
@@ -93,22 +97,21 @@
     - name: Add all instance private IPs to host group
       add_host: hostname={{ item.private_dns_name }}
                 groupname=natservers
-                groups=ec2hosts
+                groups=natservers
                 ansible_ssh_private_key_file=~/.ssh/wfm-devops-root.pem
                 ansible_ssh_user=ec2-user
-                #ansible_ssh_args= -o ControlPersist=15m -F includes/ssh.config
+                #ansible_ssh_args=-o ControlPersist=15m -F ~/.ssh/config
+                #ansible_ssh_args=-o ControlPersist=15m -F includes/ssh.config
       with_items: ec2_instances.tagged_instances
 
-- hosts: ec2hosts
+- hosts: natservers
   name: configuration play
   user: ec2-user
   gather_facts: true
-  tasks:
-
   roles:
     - { role: auto-upgrades, tags: "auto-upgrades", sudo: yes }
-#  vars:
-    #ansible_distribution: CentOS
+  vars:
+    ansible_distribution: CentOS
     #ssh_args: -o ControlPersist=15m -F includes/ssh.config
-    #scp_if_ssh: True
-    #control_path: ~/.ssh/mux-%%r@%%h:%%p
+    scp_if_ssh: True
+    control_path: ~/.ssh/mux-%%r@%%h:%%p

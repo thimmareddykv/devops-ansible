@@ -10,9 +10,11 @@
     - { role: common, tags: "common" }
     - { role: jumpserver, tags: "jumpserver" }
     - { role: ansible-users, tags: "ansible-users" }
+#    - include: includes/ec2hosts.accounts.yaml
     - include: includes/users.yaml
     - include: includes/groups.yaml
     - include: includes/keys.yaml
+#
 #    - { role: sshd, tags: "sshd" }
 #    - include_vars: includes/users.yaml
 #    - include_vars: includes/keys.yaml
