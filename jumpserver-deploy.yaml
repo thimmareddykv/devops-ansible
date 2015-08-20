@@ -4,16 +4,24 @@
 #   ansible-playbook -vvvv -i hosts/jumpservers.ini jumpserver-deploy.yaml -e "@includes/users.yaml" -e "@includes/groups.yaml" -e "@includes/keys.yaml"
 #   (SUMO) ansible-playbook -vvvv -i hosts/jumpservers.ini jumpserver-deploy.yaml -e "@includes/users.yaml" -e "@includes/groups.yaml" -e "@includes/keys.yaml dosumo=yay" --vault-password-file="~/.vault_pass.txt" 
 
+# bastion-a
+#    ansible-playbook jumpserver-deploy.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-bastion-a server_name=devops:shared:bastion-a role=jump_server instance_count=1 vpc_subnet_id=subnet-d47effff"
+#
+# bastion-b
+#    ansible-playbook jumpserver-deploy.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-bastion-b server_name=devops:shared:bastion-b role=jump_server instance_count=1 vpc_subnet_id=subnet-72ee9505"
+
 - hosts: jumpservers
 
   roles:
     - { role: common, tags: "common" }
     - { role: jumpserver, tags: "jumpserver" }
-    - { role: ansible-users, tags: "ansible-users" }
-#    - include: includes/ec2hosts.accounts.yaml
-    - include: includes/users.yaml
-    - include: includes/groups.yaml
-    - include: includes/keys.yaml
+    - role: ansible-users
+#    - include_vars: host_vars/ec2hosts.accounts
+#    - { role: ansible-users, tags: "ansible-users" }
+#    - include: includes/users.yaml
+#    - include: includes/groups.yaml
+#    - include: includes/keys.yaml
+
 #
 #    - { role: sshd, tags: "sshd" }
 #    - include_vars: includes/users.yaml
