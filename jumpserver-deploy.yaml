@@ -10,7 +10,7 @@
 # bastion-b
 #    ansible-playbook jumpserver-deploy.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-bastion-b server_name=devops:shared:bastion-b role=jump_server instance_count=1 vpc_subnet_id=subnet-72ee9505"
 
-- hosts: jumpservers
+- hosts: all
 
   roles:
     - { role: common, tags: "common" }
