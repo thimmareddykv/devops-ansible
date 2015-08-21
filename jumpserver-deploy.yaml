@@ -16,6 +16,7 @@
     - { role: common, tags: "common" }
     - { role: jumpserver, tags: "jumpserver" }
     - role: ansible-users
+#    - include: group_vars/ec2hosts.accounts
 #    - include_vars: host_vars/ec2hosts.accounts
 #    - { role: ansible-users, tags: "ansible-users" }
 #    - include: includes/users.yaml
