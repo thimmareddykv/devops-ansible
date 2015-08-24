@@ -5,9 +5,9 @@
     "name":"basic_syslog",
     "category":"OS_Audit",
     "filters":[],
-    "pathExpression": "/var/log/syslog"
+    "pathExpression": "/var/log/syslog",
     "blacklist":[],
-    "sourceType":"LocalFile",
+    "sourceType":"LocalFile"
 },
 {
     "name":"auth_log",
