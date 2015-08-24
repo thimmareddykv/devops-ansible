@@ -1,0 +1,8 @@
+- name: "ansible-tower-new.yaml"
+  hosts: all
+  roles:
+    - { role: sumologic
+      , sumo_collector_config_file: 'tower-collector.json'
+      , sumo_machine_id: 'ansible_tower_new'
+      , tags: ['sumologic'] 
+      }
