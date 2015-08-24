@@ -2,34 +2,34 @@
 "api.version": "v1",
 "sources": [
 {
-    "sourceType":"LocalFile",
-    "blacklist":[],
-    "name": "basic_syslog",
+    "name":"basic_syslog",
     "category":"OS_Audit",
     "filters":[],
     "pathExpression": "/var/log/syslog"
+    "blacklist":[],
+    "sourceType":"LocalFile",
 },
 {
-    "name":"Nginx Access Log",
-    "category":"Application_Nginx_Access",
+    "name":"auth_log",
+    "category":"OS_Audit",
     "filters":[],
-    "pathExpression":"/var/log/nginx/access.log",
+    "pathExpression":"/var/log/auth.log",
     "blacklist":[],
     "sourceType":"LocalFile"
 },
 {
-    "name":"Nginx Error Log",
-    "category":"Application_Nginx_Error",
-    "filters":[],
-    "pathExpression":"/var/log/nginx/error.log",
-    "blacklist":[],
-    "sourceType":"LocalFile"
-},
-{
-    "name":"Ansile Tower Warning Log",
+    "name":"ansible_tower_warning_log",
     "category":"Application_Ansible_Warning",
     "filters":[],
     "pathExpression":"/var/log/tower/tower_warnings.log",
+    "blacklist":[],
+    "sourceType":"LocalFile"
+},
+{
+    "name":"redis_log",
+    "category":"Application_Redis_Server_Log",
+    "filters":[],
+    "pathExpression":"/var/log/redis/redis-server.log",
     "blacklist":[],
     "sourceType":"LocalFile"
 }
