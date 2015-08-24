@@ -36,7 +36,7 @@
 
 - name: Stop the collector if it exists
   sudo: True
-  command: /opt/sumocollector/collector stop
+  command: sudo /opt/sumocollector/collector stop
   when: stat_sumo_coll.stat.exists is defined and stat_sumo_coll.stat.exists == True
   ignore_errors: True
 
