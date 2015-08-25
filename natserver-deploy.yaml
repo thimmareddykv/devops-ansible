@@ -16,6 +16,13 @@
 
   roles:
     - { role: auto-upgrades, tags: "auto-upgrades", sudo: yes }
+    - name: service-tower
+      uid: 1010
+      comment: service-tower
+      password: ''
+      #is_admin: no
+      groups:
+        - sudo
 
   vars:
     ansible_distribution: CentOS

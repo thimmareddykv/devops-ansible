@@ -1,0 +1,50 @@
+---  
+# ec2hosts allows us to effectively have new AWS hosts added to a dynamic hosts file refrenced as ec2hosts (ie hosts/ec2hosts)
+######################### SAMPLE ###################
+#users:
+#- name: alice
+#  comment: Alice
+#  password: '$6$hE1TkH.X$59flUhXGiL8tI4lOioqp1FxN8L8HrMbuP4ZFVbv5MnyeQFAhIAsbTmT6t7.p93FgyiJo3U/aJeiGHzCTUvA.s.'
+#  is_admin: yes      # This equates to sudo group
+#  groups:
+#    - devs
+#    - mgmt
+#- name: bob
+#  state: absent
+##########################
+#[ssh_connection]
+#ssh_args=-o ControlPersist=15m -F ~/.ssh/config -q
+#scp_if_ssh=True
+#control_path = ~/.ssh/mux-%%r@%%h:%%p
+#ansible_ssh_user=ec2-user
+#ansible_ssh_private_key_file=~/.ssh/wfm-devops-root.pem 
+#ansible_distribution=CentOS
+users:
+- name: service-tower
+  uid: 1010
+  comment: service-tower
+  password: ''
+  #is_admin: no
+  groups:
+    - sudo
+- name: ubuntu
+  uid: 1000
+  comment: ubuntu
+  password: '$6$NjsPot/E$bVwycS403QEkC/hAQ1uivCxaxtTWyHSttcRrYylDhtyGav1IrMTATUbz/5TNfp2FiOwCWLhUhTsmzcIsTkTEB/'
+  #is_admin: no
+# How to delete a user
+#- name: bobbyhill
+#  state: absent
+users_groups:
+- name: devops
+  gid: 1500
+- name: api
+  gid: 1501
+- name: sudo
+  gid: 1503
+- name: developers
+  gid: 1505
+users_ssh_keys:
+- name: service-tower
+  keys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQD2TeTXeBvsMMydPKhat5hpG1w1/TdjttDoWt+hyy0m8N/DXyFBMiMUyObG8P27bZ74iZ6epgkDxyaMGIwfWzn5YXILy4QZT5ZYxaKH3O5RP4X/0fWCqElz5k6NmkzPYmlhn5h2kKnB6fENO4mXUJifPPrnkY/DY+OU6rOMmozsSE6M1YGsSW95KuvTU8/E78WYNemFZ/b/sn0ahw9a+dfAeHTaFPYcpHomUNNL65NIiGtnuH+YnQ6vHCk0vNQPx5my7BQnvZEowLjAhhHdhN63l6t8E1fgBSo1pWA/Vpd8LjHnsMd2kuGLRwc60AeWZ6KntJrCVnxDycSq7127/avP8dnFBasQMylTKVHnBk0OpPrg39IDP6W3hoCY9xU9aWpqDwpwJTOxPUq1fi5XGGb5K6sJ+b8Cb5L/NpB3b9bqhmojBz261K6aJd4yLduq3Q1W2uUD1+kM3Gn05A181HT91jvx4Ib9x0tCPDezsQvgTlMZdDupe7i2EHqJMmGCU7R3R6D0m/XJmFdspf1mGTdzvItPdn2Gzxla+ccZV95WKfHewECgRiN1et3ddrfgKo5lLxoWV/GGICNONBR1i5UfKNiuggN2MAo+fYaD/X2smDirx8JY4B9k6EXVqw8k7TddmQxNUbGooqKTTSgS+aHNbPLO5eqQJSvQ4CwWO5x29Q== devops@wholefoods.com

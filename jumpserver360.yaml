@@ -46,15 +46,11 @@
     image: ami-d05e75b8 # Devops testing for jumpserver
     
     #sage_aws_group: devops-default-vpc
-    aws_group: allow-wfm-ssh
+    #aws_group: allow-wfm-ssh
+    aws_security_group: bastion
     #vpc_subnet_id: subnet-ced06eb9  # Testing Subnet
     #vpc_subnet_id: subnet-d47effff  # bastion a
     #vpc_subnet_id: subnet-72ee9505   # bastion b
-
-#  pre_tasks:
-#    - name: Check for variable node_environment
-#      fail: msg="I think you did not read the preconditions, you are unqualified to be running this"
-#      when: "'vpc_subnet_id' is not defined"
 
   tasks:
     - name: Launch server
@@ -63,7 +59,7 @@
         vpc_subnet_id: "{{ vpc_subnet_id }}"
         assign_public_ip: yes
         key_name: wfm-devops-root
-        group: "{{ aws_group }}"
+        group: "{{ aws_security_group }}"
         instance_type: "{{ instance_type }}"
         image: "{{ image }}"
         region: "{{ region }}"
@@ -71,7 +67,8 @@
         wait_timeout: 500
         exact_count: "{{ instance_count | default(1) }}"
         count_tag:
-          counter_tag: "{{ counter_tag }}"
+          #counter_tag: "{{ counter_tag }}"
+          Name: "{{ server_name }}"
       register: ec2_instances
 
 #    - include: includes/build-ec2-inventory.yaml
@@ -85,7 +82,7 @@
       args:
         tags:
           Name: "{{ server_name }}"
-          counter_tag: "{{ counter_tag }}"
+          #counter_tag: "{{ counter_tag }}"
           #role: "{{ role }}"
           #owner: devops
           "wfm:team": devops
@@ -121,10 +118,11 @@
 
 - hosts: ec2hosts.accounts
   name: configuration play
-  user: ec2-user
+  #user: ec2-user
+  user: ubuntu
   gather_facts: true
   tasks:
-
+    - include_vars: group_vars/ec2hosts.accounts   # not needed
   roles:
     - { role: common, tags: "common", sudo: yes }
     - { role: jumpserver, tags: "jumpserver", sudo: yes }

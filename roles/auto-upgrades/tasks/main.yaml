@@ -33,7 +33,7 @@
   action: lineinfile dest=/etc/yum/yum-updatesd.conf regexp="^email_to" line="email_to = jay.tischler@wholefoods.com" state=present
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
-- name: Enable the yum-updatesd servic
+- name: Enable the yum-updatesd service
   shell: chkconfig --level 345 yum-updatesd on
 
 - name: start yum-updatesd

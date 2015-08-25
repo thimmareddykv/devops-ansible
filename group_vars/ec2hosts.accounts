@@ -98,6 +98,8 @@ users:
   comment: service-tower
   password: ''
   #is_admin: no
+  groups:
+    - sudo
 - name: ubuntu
   uid: 1000
   comment: ubuntu

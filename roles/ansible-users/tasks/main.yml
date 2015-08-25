@@ -8,7 +8,7 @@
    - default.yml
    - ec2hosts.accounts.yaml
 
-- include_vars: ../../../group_vars/ec2hosts.accounts
+#- include_vars: ../../../group_vars/ec2hosts.accounts
 
 - include: add_groups.yml
 
