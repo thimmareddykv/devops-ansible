@@ -7,4 +7,4 @@
 sumo_collector_config_file: 'default-collector.json'
 sumo_machine_id: 'anon'
 
-sumo_collector_version: '19.110-9'
+sumo_collector_version: '19.119-6'

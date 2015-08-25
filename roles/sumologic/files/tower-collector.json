@@ -1,0 +1,37 @@
+{
+"api.version": "v1",
+"sources": [
+{
+    "name":"basic_syslog",
+    "category":"OS_Audit",
+    "filters":[],
+    "pathExpression": "/var/log/syslog",
+    "blacklist":[],
+    "sourceType":"LocalFile"
+},
+{
+    "name":"auth_log",
+    "category":"OS_Audit",
+    "filters":[],
+    "pathExpression":"/var/log/auth.log",
+    "blacklist":[],
+    "sourceType":"LocalFile"
+},
+{
+    "name":"ansible_tower_warning_log",
+    "category":"Application_Ansible_Warning",
+    "filters":[],
+    "pathExpression":"/var/log/tower/tower_warnings.log",
+    "blacklist":[],
+    "sourceType":"LocalFile"
+},
+{
+    "name":"redis_log",
+    "category":"Application_Redis_Server_Log",
+    "filters":[],
+    "pathExpression":"/var/log/redis/redis-server.log",
+    "blacklist":[],
+    "sourceType":"LocalFile"
+}
+]
+}
