@@ -2,8 +2,7 @@
 # file: devops-ansible/jumpserver360.yaml
 
 # Description:
-#   Attempt to launch ec2 instances 
-#   This file was borrowed from wfm-api team. Thanks.
+#   Launch jumpserver instances
 
 # Preconditions:
 #   export AWS_ACCESS_KEY_ID=
@@ -22,14 +21,6 @@
 # bastion-b
 #    ansible-playbook jumpserver360.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-bastion-b server_name=devops:shared:bastion-b role=jump_server instance_count=1 vpc_subnet_id=subnet-72ee9505"
 #
-# WARNINGS:
-#   counter_tag is used to limit number of servers launched.
-#   Make counter_tag unique per deployment if you're rotating servers in and out of a load balancer
-
-#  pre_tasks:
-#    - name: Check for variable node_environment
-#      fail: msg="I think you did not read the preconditions, you are fully unqualified to be running this"
-#      when: "'vpc_subnet_id' is not defined"
 
 - name: Launch/configure app server instance
   hosts: 127.0.0.1
@@ -110,19 +101,19 @@
 
     - name: Add all instance public IPs to host group
       add_host: hostname={{ item.public_ip }}
-                groupname=ec2hosts.accounts
-                groups=ec2hosts.accounts
+                groupname=ec2hosts.base
+                groups=ec2hosts.base
                 ansible_ssh_private_key_file=~/.ssh/wfm-devops-root.pem
                 ansible_ssh_user=ubuntu
       with_items: ec2_instances.tagged_instances
 
-- hosts: ec2hosts.accounts
+- hosts: ec2hosts.base
   name: configuration play
   #user: ec2-user
   user: ubuntu
   gather_facts: true
   tasks:
-    - include_vars: group_vars/ec2hosts.accounts   # not needed
+    - include_vars: includes/ec2hosts.accounts.yaml
   roles:
     - { role: common, tags: "common", sudo: yes }
     - { role: jumpserver, tags: "jumpserver", sudo: yes }

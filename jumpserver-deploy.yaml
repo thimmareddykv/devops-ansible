@@ -11,7 +11,7 @@
 #    ansible-playbook jumpserver-deploy.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-bastion-b server_name=devops:shared:bastion-b role=jump_server instance_count=1 vpc_subnet_id=subnet-72ee9505"
 
 - hosts: all
-  user: service-tower
+  user: service-tower21
   roles:
     - { role: common, tags: "common" }
     - { role: jumpserver, tags: "jumpserver" }
@@ -21,7 +21,7 @@
 #    - { role: papertrail, tags: "papertrail" }
   sudo: yes
   vars:
-  - include: group_vars/ec2hosts.accounts
+  - include: includes/ec2hosts.accounts.yaml
     users_admin_sudo_password: false
 #  roles:
 #  - role: ansible-users
