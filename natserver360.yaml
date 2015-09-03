@@ -43,7 +43,6 @@
     #vpc_subnet_id: subnet-ac7cfd87  # VPC wfm-development vpc-587b533d bastion-b
     #vpc_subnet_id: subnet-d47effff # VPC devops-shared vpc-b37d55d6 bastion-a
 
-
   tasks:
     - name: Launch NAT Server
       local_action:
@@ -110,6 +109,7 @@
   gather_facts: true
   roles:
     - { role: auto-upgrades, tags: "auto-upgrades", sudo: yes }
+    - { role: ansible-users, tags: "ansible-users", sudo: yes }
   vars:
     ansible_distribution: CentOS
     #ssh_args: -o ControlPersist=15m -F includes/ssh.config

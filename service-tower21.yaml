@@ -1,0 +1,40 @@
+---
+# file: devops-ansible/natserver.yaml
+# Examples:
+#   ansible-playbook -vvvv -i hosts/natservers.ini natserver-deploy.yaml --extra-vars "ansible_distribution=CentOS"
+#   ansible-playbook -vvvv -i hosts/natservers.ini natserver-deploy.yaml --extra-vars "ansible_distribution=Ubuntu"
+#   
+# Common Problems:
+#    ansible_distribution variable does not get set from hosts/natserver.ini file
+
+
+- hosts: all
+  name: configuration play
+#  user: ec2-user
+  gather_facts: true
+  sudo: true
+ # tasks:
+  vars:
+    ansible_distribution: CentOS
+  roles:
+    - { role: ansible-users, tags: "ansible-user", sudo: yes }
+
+  vars:
+    ansible_distribution: CentOS
+    users:
+    - name: service-tower21
+      uid: 11010
+      comment: service-tower21
+      password: ''
+      #is_admin: yes
+      #groups:
+      #  - sudo
+  #  users_groups:
+  #  - name: devops
+  #    gid: 1500
+  #  - name: sudo
+  #    gid: 1503
+    user_ssh_keys:
+    - name: service-tower21
+      keys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQD2TeTXeBvsMMydPKhat5hpG1w1/TdjttDoWt+hyy0m8N/DXyFBMiMUyObG8P27bZ74iZ6epgkDxyaMGIwfWzn5YXILy4QZT5ZYxaKH3O5RP4X/0fWCqElz5k6NmkzPYmlhn5h2kKnB6fENO4mXUJifPPrnkY/DY+OU6rOMmozsSE6M1YGsSW95KuvTU8/E78WYNemFZ/b/sn0ahw9a+dfAeHTaFPYcpHomUNNL65NIiGtnuH+YnQ6vHCk0vNQPx5my7BQnvZEowLjAhhHdhN63l6t8E1fgBSo1pWA/Vpd8LjHnsMd2kuGLRwc60AeWZ6KntJrCVnxDycSq7127/avP8dnFBasQMylTKVHnBk0OpPrg39IDP6W3hoCY9xU9aWpqDwpwJTOxPUq1fi5XGGb5K6sJ+b8Cb5L/NpB3b9bqhmojBz261K6aJd4yLduq3Q1W2uUD1+kM3Gn05A181HT91jvx4Ib9x0tCPDezsQvgTlMZdDupe7i2EHqJMmGCU7R3R6D0m/XJmFdspf1mGTdzvItPdn2Gzxla+ccZV95WKfHewECgRiN1et3ddrfgKo5lLxoWV/GGICNONBR1i5UfKNiuggN2MAo+fYaD/X2smDirx8JY4B9k6EXVqw8k7TddmQxNUbGooqKTTSgS+aHNbPLO5eqQJSvQ4CwWO5x29Q== devops@wholefoods.com

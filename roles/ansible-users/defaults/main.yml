@@ -14,7 +14,8 @@ users_admin_uses_ansible: yes
 # If set to true, require a password for sudo, false to not require a password
 users_admin_sudo_password: yes
 
-users_admin_group: wheel
+#users_admin_group: wheel
+users_admin_group: sudo
 users_default_password: '!!'
 
 # Lists of users to create and delete
