@@ -24,24 +24,3 @@
   vars:
   - include_vars: includes/ec2hosts.accounts.yaml
     users_admin_sudo_password: false
-  var_files:
-    - "group_vars/ec2hosts.accounts"
-#  roles:
-#  - role: ansible-users
-#    users:
-#    - name: carl
-#      uid: 1010
-#      comment: 'Carl Crisp'
-#      is_admin: yes
-#      groups:
-#      - beancounters
-#    - name: ec_user
-#      state: absent
-#    users_groups:
-#    - name: beancounters
-#    users_ssh_keys:
-#    - name: carl
-#      keys:
-#      - ssh-rsa AAAA....... carl@accounts.example.com
-
-  #  - include: includes/users.yaml
