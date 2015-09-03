@@ -1,5 +1,5 @@
 ---
-# file: devops-ansible/jumpserver.yaml
+# file: devops-ansible/jumpserver-deploy.yaml
 # Examples:
 #   ansible-playbook -vvvv -i hosts/jumpservers.ini jumpserver-deploy.yaml -e "@includes/users.yaml" -e "@includes/groups.yaml" -e "@includes/keys.yaml"
 #   (SUMO) ansible-playbook -vvvv -i hosts/jumpservers.ini jumpserver-deploy.yaml -e "@includes/users.yaml" -e "@includes/groups.yaml" -e "@includes/keys.yaml dosumo=yay" --vault-password-file="~/.vault_pass.txt" 
@@ -12,15 +12,16 @@
 
 - hosts: all
   user: service-tower21
+  vars:
+  - include: includes/ec2hosts.accounts.yaml
+  - included_vars: includes/ec2hosts.accounts.yaml
+  - included_vars: group_vars/ec2hosts.accounts
+    users_admin_sudo_password: false
   roles:
     - { role: common, tags: "common" }
     - { role: jumpserver, tags: "jumpserver" }
     - { role: ansible-users, tags: "ansible-users" }
-#    - { role: ansible-users, tags: "ansible-users" }
 #    - include: group_vars/ec2hosts.accounts
 #    - { role: sumologic, tags: "sumologic" }
 #    - { role: papertrail, tags: "papertrail" }
   sudo: yes
-  vars:
-  - include_vars: includes/ec2hosts.accounts.yaml
-    users_admin_sudo_password: false
