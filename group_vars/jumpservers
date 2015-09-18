@@ -85,7 +85,6 @@ users:
   #is_admin: no
   groups:
     - api
-    - developers
 - name: tynakiefer
   uid: 1009
   comment: tynakiefer

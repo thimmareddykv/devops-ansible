@@ -19,10 +19,7 @@
 
 - include: sudo.yml
 
-#- name: Add ansible-deploy24 to suders file explicitly
-#  action: lineinfile dest=/etc/sudoers regexp="^service-tower21 ALL=(ALL:ALL) NOPASSWD:ALL" state=present
-
-- name: Add ansible-deploy24 to suders file explicitly
+- name: Add service-tower21 to suders file explicitly
   lineinfile: dest=/etc/sudoers
               regexp='^service-tower21 ALL=(ALL:ALL) NOPASSWD:ALL'
               line='service-tower21 ALL=(ALL:ALL) NOPASSWD:ALL'

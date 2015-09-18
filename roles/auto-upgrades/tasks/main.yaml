@@ -11,27 +11,27 @@
   yum: name={{item}} state=present
   with_items:
   - yum-updatesd
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_distribution == 'centos' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - name: Configure yum-updatesd do_update
   action: lineinfile dest=/etc/yum/yum-updatesd.conf regexp="^do_update" line="do_update = yes" state=present
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_distribution == 'centos' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - name: Configure yum-updatesd do_download
   action: lineinfile dest=/etc/yum/yum-updatesd.conf regexp="^do_download" line="do_download = yes" state=present
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_distribution == 'centos' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - name: Configure yum-updatesd do_download_deps
   action: lineinfile dest=/etc/yum/yum-updatesd.conf regexp="^do_download_deps" line="do_download_deps = yes" state=present
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_distribution == 'centos' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - name: Configure yum-updatesd email_to
   action: lineinfile dest=/etc/yum/yum-updatesd.conf regexp="^email_to" line="email_to = jay.tischler@wholefoods.com" state=present
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_distribution == 'centos' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - name: Configure yum-updatesd email_from
   action: lineinfile dest=/etc/yum/yum-updatesd.conf regexp="^email_to" line="email_to = jay.tischler@wholefoods.com" state=present
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_distribution == 'centos' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - name: Enable the yum-updatesd service
   shell: chkconfig --level 345 yum-updatesd on
