@@ -10,7 +10,7 @@
   roles:
     - { role: common, tags: "common" }
     - { role: auto-upgrades, tags: "auto-upgrades" }
-    - { role: ntp, tags: "ntp" }
+    - { role: ntpd, tags: "ntpd" }
     #- { role: nginx, tags: "nginx" }
     - role: ansible-users
       users:

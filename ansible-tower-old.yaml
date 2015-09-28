@@ -1,7 +1,7 @@
 - name: "ansible-tower-old.yaml"
   hosts: towers
   roles:
-    - { role: ntp, tags: "ntp" }
+    - { role: ntpd, tags: "ntdp" }
     - { role: sumologic
       , sumo_collector_config_file: 'tower-collector.json'
       , sumo_machine_id: 'ansible_tower_old'
