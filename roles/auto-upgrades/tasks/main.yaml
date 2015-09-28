@@ -35,9 +35,11 @@
 
 - name: Enable the yum-updatesd service
   shell: chkconfig --level 345 yum-updatesd on
+  when: ansible_distribution == 'centos' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - name: start yum-updatesd
   service: name=yum-updatesd state=started
+  when: ansible_distribution == 'centos' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - name: Install list of packages
   apt: pkg={{item}} state=installed

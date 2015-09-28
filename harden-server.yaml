@@ -7,18 +7,18 @@
 #   ansible-playbook -vvvv -i hosts/harden.ini harden-server.yaml -e "@includes/users.yaml" -e "@includes/groups.yaml" -e "@includes/keys.yaml"
 
 
-
-
 - hosts: all
   name: Server Hardening
-  user: { ssh-user }
+  user: ubuntu
+  remote_user: ubuntu
+  sudo_user: ubuntu
+#  user: jtischler
+#  sudo_user: jtischler
+#  remote_user: jtischler
   gather_facts: true
-  tasks:
-    - name: Install Ruby Gem for Ansible-Tower
-      command: sudo apt-get install ruby && sudo gem install iron_worker_ng -v 1.6.4
 
   roles:
     - { role: auto-upgrades, tags: "auto-upgrades", sudo: yes }
-
-  vars:
+    - { role: ntp, tags: "ntp", sudo: yes }
+#  vars:
    # ansible_distribution: CentOS

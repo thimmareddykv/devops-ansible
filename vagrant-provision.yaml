@@ -1,57 +1,48 @@
 ---
-- hosts: vagrant
+- hosts: all
   remote_user: vagrant
   sudo: yes
+  vars_files:
+#  - include: includes/ec2hosts.accounts.yaml
+#  - included_vars: includes/ec2hosts.accounts.yaml
+  - included_vars: group_vars/ec2hosts.accounts
+#  - included_vars: group_vars/jumpservers
   roles:
     - { role: common, tags: "common" }
     - { role: auto-upgrades, tags: "auto-upgrades" }
+    - { role: ntp, tags: "ntp" }
     #- { role: nginx, tags: "nginx" }
     - role: ansible-users
-      users:
-      - name: carl
-        uid: 1010
-        comment: 'Carl Crisp'
-        is_admin: yes
-        groups:
-        - beancounters
-      - name: ec_user
-        state: absent
-      users_groups:
-      - name: beancounters
-      users_ssh_keys:
-      - name: carl
-        keys:
-        - ssh-rsa AAAA....... carl@accounts.example.com
       users:
       - name: jtischler
         uid: 1112
         comment: 'jtischler'
-        password: '$6$NjsPot/E$bVwycS403QEkC/hAQ1uivCxaxtTWyHSttcRrYylDhtyGav1IrMTATUbz/5TNfp2FiOwCWLhUhTsmzcIsTkTEB/'
+        password: ''
         is_admin: yes
         groups:
-          - debian-transmission
+          - devops
       users_groups:
       - name: jtischler
         gid: 1112
       - name: sudo
         gid: 27
+      - name: devops
+        gid: 1199
+      - name: jokes
+        gid: 1198
       users_ssh_keys:
       - name: jtischler
         keys:
           - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDWBFyNu0yoh9+q4f5olurpQSJWX1CwM54rvXZzytLAn92D1w2yvtzw248IpoauKQxS/YdupVwehI7iViszomJcAQnl9QkNc9Fu0FYF+nGHn1xREIh1DNIX4zKfVLxS6Vpjz5Wa00vVYU1gc01//rYkNqKR0smiR3PVnprV05Mpw9dk+gJ9oipt8rjvZuarwdTiS0U30MXUG5pSlPjwjIiM6NUD3g1BQiW6XF4qIIIs7vdDEXs3iXZLnZjsdLbs0uj5+lIKfGycy9yfjytP5gvmLATaZvs4+UE/ZfwFlhC1p202LwiDqMBaFbQ+9Bsl5Jrrt293DdNQIGm3CWoMaEBz jay.tischler@wholefoods.com
+        state: absent
 
 
   tasks:
-#    - name: Install standard packages
-#      apt: pkg={{ item }} state=latest
-#      with_items:
-#        - nginx
-#        - php5-fpm
-#        - ncdu
-#        - finger
-#        - fail2ban
-#        - lsb-release
-#        - scrot
+    - name: Install standard packages
+      apt: pkg={{ item }} state=latest
+      with_items:
+        - ncdu
+        - finger
 
     - name: Set the hostname in /etc/hostname
       shell: echo {{ ansible_hostname }} > /etc/hostname

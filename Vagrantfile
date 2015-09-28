@@ -20,8 +20,9 @@ config.vm.network "public_network", ip: '192.168.s.220', bridge: 'eth0'
     ansible.limit = "all"
   end
   config.vm.provider :virtualbox do |vb|
+    #vb.gui = true
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
   end
-  config.vm.synced_folder ".", "/vagrant", owner:"www-data", group:"www-data", mount_options:["dmode=775", "fmode=775"]
+#  config.vm.synced_folder ".", "/vagrant", owner:"www-data", group:"www-data", mount_options:["dmode=775", "fmode=775"]
 end
