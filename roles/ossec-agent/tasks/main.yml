@@ -1,61 +1,44 @@
 ---
-# tasks file for ossec-agent
+- name: Add the ossec.wazuh Repository
+  lineinfile: "dest=/etc/apt/sources.list state=present regexp='^' line='deb http://ossec.wazuh.com/repos/apt/ubuntu trusty main'"
+#  when: ansible_distribution_version == "trusty" and ansible_distribution == "ubuntu"
 
-- name: "Install the correct repository"
-  include: "ubuntu.yml"
-  when: ansible_os_family == "ubuntu"
+- name: Install ossec and any dependencies
+  apt: pkg={{item}} state=installed update_cache=yes force=yes # cache_valid_time=3600
+  with_items:
+   # - gcc
+   # - libpq-dev
+   # - libmysqld-dev
+#    - libtcl8.6
+    - ossec-hids-agent
 
-- name: "Installing the ossec-agent.conf"
-  template: src=var-ossec-etc-ossec-agent.conf.j2
-            dest=/var/ossec/etc/ossec-agent.conf
-            owner=root
-            group=root
-            mode=0644
-  notify: restart ossec-agent
-  tags:
-    - init
-    - config
+- fail: msg="The system may not be provisioned because yum"
+  when: ansible_distribution == "centos"
 
-- name: "Check if client.keys exists"
-  stat: path=/var/ossec/etc/client.keys
-  register: check_keys
-  tags:
-    - config
+- name: Create tmp and var directories for ossec
+  file: path={{ item }} state=directory
+  with_items:
+    - "{{ ossec_path }}"
+    - "/var/ossec/etc"
+  
+- name: Copy the ossec_input file
+  template: src=ossec_client_input.j2 dest="{{ ossec_path }}/ossec_client_input.txt"
 
-# When provisioning a lot of agents, the following step may fail
-# on the server. So we set ignore_errors to true
-- name: "Starting auth daemon on server {{ ossec_server_name }}"
-  shell: '/var/ossec/bin/ossec-authd -p 1515 >/dev/null 2>&1 &'
-  when: check_keys.stat.exists == false and ossec_server_name|default("") != ""
-  delegate_to: "{{ ossec_server_name }}"
-  ignore_errors: yes
-  tags:
-    - config
+- name: Copy the ossec.conf file
+  template: src=ossec.conf.j2 dest="/var/ossec/etc/ossec.conf"
+ 
+- name: Get the client key from server
+  copy: src=/tmp/client.keys dest=/var/ossec/etc/client2.keys  
+ 
+- name: Extract only the key for current client
+  shell: grep "{{ ansible_ssh_host }}" /var/ossec/etc/client2.keys > /var/ossec/etc/client.keys
+ 
+- name: Delete other client keys   
+  file: name=/var/ossec/etc/client2.keys state=absent
+ 
+- name: Start Ossec server
+  service: name=ossec state=started
 
-# - name: 'Please execute the following command on your ossec-server: "/var/ossec/bin/ossec-authd -p 1515 >/dev/null 2>&1 &"'
-#  pause: minutes=2
-#  when: check_keys.stat.exists == false and ossec_server_name|default("") == "" 
-
-# - name: "register client"
-#   shell: /var/ossec/bin/agent-auth -m {{ ossec_server_ip }} -p 1515
-#         creates=/var/ossec/etc/client.keys
-#  tags:
-#    - config
-
-# When provisioning a lot of agents, the following step may fail
-# on the server. So we set ignore_errors to true
-- name: "kill the auth-daemon on server {{ ossec_server_name }}"
-  shell: /usr/bin/pkill -f /var/ossec/bin/ossec-authd
-  delegate_to: "{{ ossec_server_name }}"
-  when: check_keys.stat.exists == false and ossec_server_name|default("") != ""
-  ignore_errors: yes
-  tags:
-    - config
-
-# - name: 'Please execute the following command on your ossec-server: "/usr/bin/pkill -f /var/ossec/bin/ossec-authd"'
-#   pause: minutes=1
-#   when: check_keys.stat.exists == false and ossec_server_name|default("") == ""
-
-- name: Copy Remote-To-Remote (from agent to server)
-  synchronize: mode=push src=/var/ossec/bin/client.keys dest=/tmp/clent.jay.keys
-  delegate_to: poc4
+#- name: Uninstall gcc if required for compiling
+#  apt: pkg=gcc state=absent
+#  when: ansible_distribution == "ubuntu"
