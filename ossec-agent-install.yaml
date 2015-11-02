@@ -1,19 +1,26 @@
 ---
-#  ansible-playbook ossec-agent-install-playbook.yaml -i hosts/ossec.ini -vvvv
+#  ansible-playbook ossec-agent-install.yaml -i hosts/ossec.ini -vvvv
 - name: Register OSSEC client with OSSEC server
   hosts: ossec-server
   remote_user: ubuntu
   sudo: yes
 
+  vars:
+    ossec_tmp: /tmp/ossec-hids
+    ossec_server_ip: 52.3.129.70
+    ossec_manage_agent_input: /tmp/ossec_manage_agent_input.txt
+    extract_path: /tmp
+
   pre_tasks:
     - name: Copy add_agent.sh script
-      copy: src=add_agent.sh dest=/tmp/add_agent.sh mode=755 owner=root group=root
+      template: src=roles/ossec-agent/templates/add_agent.sh.j2 dest=/tmp/add_agent.sh mode=755 owner=root group=root
 
     - debug: msg={{ hostvars[groups['ossec-client'][0]]['ansible_ssh_host'] }}
     - debug: msg={{ hostvars[groups['ossec-client'][0]]['inventory_hostname'] }}
 
     - name: Register ossec client with ossec server. Execute add_agent.sh with first client hostname and ip address.
-      shell: /tmp/add_agent.sh "{{ hostvars[groups['ossec-client'][0]]['inventory_hostname'] }}" "{{ hostvars[groups['ossec-client'][0]]['ansible_ssh_host'] }}"
+      #shell: /tmp/add_agent.sh "{{ hostvars[groups['ossec-client'][0]]['inventory_hostname'] }}" "{{ hostvars[groups['ossec-client'][0]]['ansible_ssh_host'] }}"
+      shell: /tmp/add_agent.sh
       notify: 
       - restart ossec
     
@@ -30,8 +37,7 @@
   sudo: yes
 
   vars:
-    ossec_url: http://www.ossec.net/files/ossec-hids-2.8.2.tar.gz
-    ossec_path: /tmp/ossec-hids
+    ossec_tmp: /tmp/ossec-hids
     ossec_server_ip: 52.3.129.70
     ossec_manage_agent_input: /tmp/ossec_manage_agent_input.txt
     extract_path: /tmp

@@ -11,6 +11,6 @@ EOF
 
 /var/ossec/bin/manage_agents < ossec_agent_input.txt
 
-rm -f ossec_agent_input.txt
+#rm -f ossec_agent_input.txt
 
 exit 0
