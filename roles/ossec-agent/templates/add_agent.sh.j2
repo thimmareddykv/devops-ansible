@@ -2,20 +2,22 @@
 # This script will register the ossec-client on the ossec-server
 
 cat > ossec_agent_input.txt <<EOF
-A
+A {# Agent #}
+{# Hostname of client #}
 {% for host in groups['ossec-client'] %}
     {{ inventory_hostname }}
 {% endfor %}
+{# IP Address of client #}
 {% for host in groups['ossec-client'] %}
     {{ ansible_ssh_host }}
 {% endfor %}
 
-y
-Q
+y {# Yes #}
+Q {# Quit #}
 EOF
 
 /var/ossec/bin/manage_agents < ossec_agent_input.txt
 
-#rm -f ossec_agent_input.txt
+rm -f ossec_agent_input.txt
 
 exit 0

@@ -2,7 +2,6 @@
 #  ansible-playbook ossec-agent-install.yaml -i hosts/ossec.ini -vvvv
 - name: Register OSSEC client with OSSEC server
   hosts: ossec-server
-  remote_user: ubuntu
   sudo: yes
 
   vars:
@@ -19,7 +18,6 @@
     - debug: msg={{ hostvars[groups['ossec-client'][0]]['inventory_hostname'] }}
 
     - name: Register ossec client with ossec server. Execute add_agent.sh with first client hostname and ip address.
-      #shell: /tmp/add_agent.sh "{{ hostvars[groups['ossec-client'][0]]['inventory_hostname'] }}" "{{ hostvars[groups['ossec-client'][0]]['ansible_ssh_host'] }}"
       shell: /tmp/add_agent.sh
       notify: 
       - restart ossec
@@ -33,7 +31,6 @@
 
 - name: Ossec agent installation on OSSEC client
   hosts: ossec-client
-  user: ubuntu
   sudo: yes
 
   vars:
