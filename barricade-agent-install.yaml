@@ -1,7 +1,6 @@
 #  ansible-playbook barricade-agent-install.yaml -i hosts/barricade.ini -vvvv
 - name: Barricade agent installation
   hosts: alien
-  remote_user: ubuntu
   sudo: yes
 
   vars:
