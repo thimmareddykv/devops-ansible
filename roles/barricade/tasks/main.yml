@@ -1,0 +1,10 @@
+---
+# curl -sSL https://app.barricade.io/install/6cc35708-c265-485d-8f4a-bb3e4e58e6bb/install.sh | sudo bash
+- name: download barricade agent
+  get_url: url=https://app.barricade.io/install/{{ barricade_license_key }}/install.sh dest=/tmp/installbarricade.sh mode=0550
+
+# get_url: url=https://app.barricade.io/install/6cc35708-c265-485d-8f4a-bb3e4e58e6bb/install.sh dest=/tmp/installbarricade.sh mode=0550
+
+- name: execute /tmp/installbarricade.sh
+  command: /tmp/installbarricade.sh
+  sudo: yes

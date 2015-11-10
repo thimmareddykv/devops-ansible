@@ -1,0 +1,10 @@
+#  ansible-playbook barricade-agent-install.yaml -i hosts/barricade.ini -vvvv
+- name: Barricade agent installation
+  hosts: alien
+  sudo: yes
+
+  vars:
+    barricade_license_key: "6cc35708-c265-485d-8f4a-bb3e4e58e6bb"
+
+  roles:
+     - barricade
