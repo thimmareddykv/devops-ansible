@@ -26,8 +26,7 @@ def write_instances(instance):
     csv_file.flush()
  
 if __name__=="__main__":
-    # IAM user for Old AWS user/devops.autoinventory
-    connection = EC2Connection(aws_access_key_id='AKIAIB5FFTW3DXHAK4QA',aws_secret_access_key='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')
+    connection = EC2Connection()
 
     process_instance_list(connection)
     csv_file.close()
