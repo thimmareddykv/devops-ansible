@@ -11,14 +11,6 @@ def build_instance_list(reservation):
     map(write_instances,reservation.instances)
  
 def write_instances(instance):
-###### Nobody cares ###########################################################################################
-#    if (instance.virtualizationType == 'hvm'):
-#        platform = 'Windows'
-#    else:
-#        platform = 'Linux'
-#    csv_file.write("%s,%s,%s,%s,%s,%s\n"%(instance.id,instance.public_dns_name,
-#                                          instance.state,instance.placement,instance.architecture, platform))
-#################################################################################################################
 
     # Beginning of alternate method if we choose to break out tags:
 
@@ -34,7 +26,7 @@ def write_instances(instance):
     csv_file.flush()
  
 if __name__=="__main__":
-#    connection = EC2Connection(aws_access_key_id='AKIAJOCV3JTVUYTZSOWQ',aws_secret_access_key='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')
+    # IAM user for Old AWS user/devops.autoinventory
     connection = EC2Connection(aws_access_key_id='AKIAIB5FFTW3DXHAK4QA',aws_secret_access_key='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')
 
     process_instance_list(connection)
