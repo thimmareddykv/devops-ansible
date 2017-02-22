@@ -85,13 +85,22 @@ users:
   #is_admin: no
   groups:
     - api
-- name: tynakiefer
-  uid: 1009
-  comment: tynakiefer
-  password: ''
-  #is_admin: no
-  groups:
     - developers
+- name: msutton
+  uid: 1017
+  comment: Maria
+  password: ''
+  #is_admin: yes
+  groups:
+    - devops
+    - sudo
+#- name: tynakiefer
+#  uid: 1009
+#  comment: tynakiefer
+#  password: ''
+  #is_admin: no
+#  groups:
+#    - developers
 - name: service-tower21
   uid: 1010
   comment: service-tower21
@@ -135,6 +144,9 @@ users_ssh_keys:
 - name: service-tower21
   keys:
     - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQD2TeTXeBvsMMydPKhat5hpG1w1/TdjttDoWt+hyy0m8N/DXyFBMiMUyObG8P27bZ74iZ6epgkDxyaMGIwfWzn5YXILy4QZT5ZYxaKH3O5RP4X/0fWCqElz5k6NmkzPYmlhn5h2kKnB6fENO4mXUJifPPrnkY/DY+OU6rOMmozsSE6M1YGsSW95KuvTU8/E78WYNemFZ/b/sn0ahw9a+dfAeHTaFPYcpHomUNNL65NIiGtnuH+YnQ6vHCk0vNQPx5my7BQnvZEowLjAhhHdhN63l6t8E1fgBSo1pWA/Vpd8LjHnsMd2kuGLRwc60AeWZ6KntJrCVnxDycSq7127/avP8dnFBasQMylTKVHnBk0OpPrg39IDP6W3hoCY9xU9aWpqDwpwJTOxPUq1fi5XGGb5K6sJ+b8Cb5L/NpB3b9bqhmojBz261K6aJd4yLduq3Q1W2uUD1+kM3Gn05A181HT91jvx4Ib9x0tCPDezsQvgTlMZdDupe7i2EHqJMmGCU7R3R6D0m/XJmFdspf1mGTdzvItPdn2Gzxla+ccZV95WKfHewECgRiN1et3ddrfgKo5lLxoWV/GGICNONBR1i5UfKNiuggN2MAo+fYaD/X2smDirx8JY4B9k6EXVqw8k7TddmQxNUbGooqKTTSgS+aHNbPLO5eqQJSvQ4CwWO5x29Q== devops@wholefoods.com
+- name: msutton
+  keys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC61OvhR9FAWb/9dCBCim/B9U+GL+QoknBRw2UTP1WMjQSDWhSGPbAugSSvVf1CSdaVt0+5IMAQbq9dyaBCg1nTP56OvPcVO6fjJBQ/WjGiOvvUlVEP/RFyrXUVqz6x28WJm4eXDrmEETmR9Msus3iioxKtrJvUjYjKPRp2udmwxpquqbsk01mX5P+W8onH6G678u5nnyz4IwaaF6+Q/Q761Kzik3m/UFM/w6e4c2AedeoY7awXUsjPVca7f29ErPr3neJIsF0EBD6ykErkvGJi9Urzb2wYXuirQNSyzjIMMkkiPqKwhBdWvQiPoeG3bbv+smnlFyb5JeJFdKbZsRGdajb/2vxX75ZoH2oK3nPDgITN9TTzIgclP4RDxG3726wDGalatXWv70tys3+csyWIcSIrfYZbma6ayMgDXwXFqhsZaegV/YRxdbIWMpcLWZ2Y1zqucl0yfvu61liOwGqNqBg3evUIhjpVPLFy+lY3GAPHsTkEvIkXEY8sqrO7YgwaeGKZdXfdmwJNB2BATibcQm88KgarAGtbgwxj0qAoO0x2CSjxJlAOFlnC7odw8WPGCKxRpdMG5Z/2kfCo6S1Rwra+pyMmwsTTx1ufCqXcyUoerBBL2mkDpTkbMb/YcvSnJjsCsdU5qdfcnH4V0mFCNTKN/+522r9EVg79i5UZlQ== Maria.Sutton@adminisatorsmbp.wfm.pvt
 #- name: jkirubakaran
 #  keys:
 #    - ssh-rsa AAAA.....alice@elsewhere.com
