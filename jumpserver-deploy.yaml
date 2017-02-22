@@ -22,7 +22,6 @@
     - { role: common, tags: "common" }
     - { role: jumpserver, tags: "jumpserver" }
     - { role: ansible-users, tags: "ansible-users" }
-    - include: includes/ec2hosts.accounts.yaml
 #    - include: group_vars/ec2hosts.accounts
 #    - { role: sumologic, tags: "sumologic" }
 #    - { role: papertrail, tags: "papertrail" }
