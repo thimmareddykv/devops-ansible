@@ -15,8 +15,8 @@
   vars:
   - include: includes/ec2hosts.accounts.yaml
   - included_vars: includes/ec2hosts.accounts.yaml
-  - included_vars: group_vars/ec2hosts.accounts
-  - included_vars: group_vars/jumpservers
+#  - included_vars: group_vars/ec2hosts.accounts
+#  - included_vars: group_vars/jumpservers
     users_admin_sudo_password: false
   roles:
     - { role: common, tags: "common" }
