@@ -19,10 +19,9 @@
 #  - included_vars: group_vars/jumpservers
     users_admin_sudo_password: false
   roles:
-    - { role: common, tags: "common" }
-    - { role: jumpserver, tags: "jumpserver" }
+#    - { role: common, tags: "common" }
+#    - { role: jumpserver, tags: "jumpserver" }
     - { role: ansible-users, tags: "ansible-users" }
 #    - include: group_vars/ec2hosts.accounts
 #    - { role: sumologic, tags: "sumologic" }
-#    - { role: papertrail, tags: "papertrail" }
   sudo: yes
