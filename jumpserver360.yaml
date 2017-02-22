@@ -21,6 +21,12 @@
 # bastion-b
 #    ansible-playbook jumpserver360.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-bastion-b server_name=devops:shared:bastion-b role=jump_server instance_count=1 vpc_subnet_id=subnet-72ee9505"
 #
+# bastion-c  (same subnet as bastion-a
+#    ansible-playbook jumpserver360.yaml -i hosts/jumpservers.ini --extra-vars "counter_tag=devops-bastion-c server_name=devops:shared:bastion-c role=jump_server instance_count=1 vpc_subnet_id=subnet-d47effff" --vault-password-file="~/.vault_pass.txt"
+#
+#  Do you need the vault password?
+# append to the end->     --vault-password-file="~/.vault_pass.txt"
+
 
 - name: Launch/configure app server instance
   hosts: 127.0.0.1
