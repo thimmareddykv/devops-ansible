@@ -38,6 +38,7 @@ users:
     - sudo
     - api
 - name: mgaudet
+  state: absent
   uid: 1004
   comment: Michael
   password: ''
@@ -57,6 +58,7 @@ users:
     - api
     - developers
 - name: dwalker
+  state: absent
   uid: 1006
   comment: Dan
   password: ''
@@ -81,6 +83,7 @@ users:
 - name: spatel
   uid: 1008
   comment: Samir
+  state: absent
   password: ''
   #is_admin: no
   groups:
